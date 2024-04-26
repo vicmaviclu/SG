@@ -7,7 +7,7 @@ import { TrackballControls } from '../libs/TrackballControls.js'
 import { Stats } from '../libs/stats.module.js'
 
 // Clases de mi proyecto
-import { Juego } from './Juego.js'
+import { MyCircuito } from './MyCircuito.js'
 
 
  
@@ -50,7 +50,7 @@ class MyScene extends THREE.Scene {
     // El modelo puede incluir su parte de la interfaz gráfica de usuario. Le pasamos la referencia a 
     // la gui y el texto bajo el que se agruparán los controles de la interfaz que añada el modelo.
 
-    this.model = new Juego(this.gui, "Parametros revolucion");
+    this.model = new MyCircuito(this.gui, "Parametros revolucion");
     this.add(this.model);
 
   }

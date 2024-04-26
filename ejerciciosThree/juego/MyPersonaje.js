@@ -3,7 +3,7 @@ import {CSG} from '../libs/CSG-v2.js'
 
  
 class MyPersonaje extends THREE.Object3D {
-  constructor(gui,titleGui) {
+  constructor() {
     super();
     /* MATERIAL */
     var material = new THREE.MeshNormalMaterial();
@@ -85,10 +85,8 @@ class MyPersonaje extends THREE.Object3D {
     this.add(ruedaDelanteraDerecha);
     this.add(ruedaTraseraIzquierda);
     this.add(ruedaTraseraDerecha);
-  }
-  
-  createGUI (gui,titleGui) {
 
+    this.rotateY(Math.PI / 2);
   }
 
   update () {

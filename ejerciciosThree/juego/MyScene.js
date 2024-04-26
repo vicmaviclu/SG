@@ -9,6 +9,7 @@ import { Stats } from '../libs/stats.module.js'
 // Clases de mi proyecto
 import { Juego } from './Juego.js'
 import { MyPersonaje } from './MyPersonaje.js'
+import { MyPinchos } from './MyPinchos.js'
 
 
  
@@ -51,8 +52,8 @@ class MyScene extends THREE.Scene {
     // El modelo puede incluir su parte de la interfaz gráfica de usuario. Le pasamos la referencia a 
     // la gui y el texto bajo el que se agruparán los controles de la interfaz que añada el modelo.
 
-    this.model = new MyPersonaje(this.gui, "Parametros");
-    this.add(this.model);
+    this.personaje = new MyPersonaje();
+    this.add(this.personaje);
 
   }
 
@@ -235,7 +236,7 @@ class MyScene extends THREE.Scene {
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Se actualiza el resto del modelo
-    this.model.update();
+    this.personaje.update();
 
 
     

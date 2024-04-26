@@ -55,6 +55,8 @@ class MyScene extends THREE.Scene {
     this.personaje = new MyPersonaje();
     this.add(this.personaje);
 
+    
+
   }
 
   initStats() {

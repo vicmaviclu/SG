@@ -10,10 +10,10 @@ class MyOvni extends THREE.Object3D {
     
     var materialLoader = new MTLLoader();
     var objectLoader = new OBJLoader();
-    materialLoader.load('ovni/ufo.mtl', 
+    materialLoader.load('../models/ovni/ufo.mtl', 
         (materials) => {
             objectLoader.setMaterials(materials);
-            objectLoader.load('ovni/ufo.obj',
+            objectLoader.load('../models/ovni/ufo.obj',
                 (object) => {
                     this.add(object);
                 }, null, null);

@@ -10,6 +10,7 @@ import { Stats } from '../libs/stats.module.js'
 import { MyCircuito } from './MyCircuito.js'
 import { MyPinchos } from './MyPinchos.js'
 import { MyOvni } from './MyOvni.js'
+import { MyGasolina } from './MyGasolina.js'
 
 
  
@@ -54,7 +55,9 @@ class MyScene extends THREE.Scene {
     // this.add(this.model);
     // this.model = new MyPinchos(this.gui, "Parametros revolucion");
     // this.add(this.model);
-    this.model = new MyOvni();
+    // this.model = new MyOvni();
+    // this.add(this.model);
+    this.model = new MyGasolina();
     this.add(this.model);
 
   }

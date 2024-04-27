@@ -1,28 +1,10 @@
 import * as THREE from '../libs/three.module.js'
-import {CSG} from '../libs/CSG-v2.js'
-import { MTLLoader } from '../libs/MTLLoader.js'
-import { OBJLoader } from '../libs/OBJLoader.js'
 
  
 class MyOvni extends THREE.Object3D {
   constructor() {
     super();
     
-    // var materialLoader = new MTLLoader();
-    // var objectLoader = new OBJLoader();
-    // materialLoader.load('../models/ovni/ufo.mtl', 
-    //     (materials) => {
-    //         objectLoader.setMaterials(materials);
-    //         objectLoader.load('../models/ovni/ufo.obj',
-    //             (object) => {
-    //                 this.add(object);
-    //             }, null, null);
-    //     }
-    // );
-    // this.position.x = 0;
-    // this.position.y = -10;
-    // this.position.z = 0;
-
     /* MATERIAL */
     var material = new THREE.MeshNormalMaterial();
     material.flatShading = true;

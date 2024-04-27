@@ -55,7 +55,7 @@ class MyScene extends THREE.Scene {
     this.personaje = new MyPersonaje();
     this.add(this.personaje);
 
-    
+
 
   }
 
@@ -240,7 +240,7 @@ class MyScene extends THREE.Scene {
     // Se actualiza el resto del modelo
     this.personaje.update();
 
-
+    
     
     // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
     this.renderer.render (this, this.getCamera());

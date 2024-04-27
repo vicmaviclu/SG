@@ -11,16 +11,22 @@ class MyPinchos extends THREE.Object3D {
     material.needsUpdate = true;
 
     /* GEOMETRY */
-    var geometriaPinchos = new THREE.ConeGeometry(0.1, 0.3, 32);
+    var geometriaPinchos = new THREE.ConeGeometry(0.2, 0.4, 32);
 
     /* MESHES */
-    var pincho1 = new THREE.Mesh(geometriaPinchos, material);
-    
+    var pinchos = [];
+    for(var i = 0; i < 4; i++){
+      pinchos.push(new THREE.Mesh(geometriaPinchos, material));
+    }
     /* POSICIONES */
-    pincho1.position.set(0, 0, 0);
+    for(var i = 0; i < 4; i++){
+      pinchos[i].position.set(0, 0, i*0.4);
+    }
 
     /* THIS */
-    this.add(pincho1);
+    for(var i = 0; i < pinchos.length; i++){
+      this.add(pinchos[i]);
+    }
     
   }
   

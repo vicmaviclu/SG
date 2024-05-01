@@ -6,9 +6,8 @@ class MyEscudo extends THREE.Object3D {
   constructor() {
     super();
     /* MATERIAL */
-    var material = new THREE.MeshNormalMaterial();
-    material.flatShading = true;
-    material.needsUpdate = true;
+    var material = new THREE.MeshStandardMaterial();
+    material.color.set(0x666666);
 
     /* SHAPES */
     // Shape de la base 
@@ -45,8 +44,7 @@ class MyEscudo extends THREE.Object3D {
 
     var material_logo = new THREE.MeshBasicMaterial();
     material_logo.color.set(0xff0000);
-    material_logo.flatShading = true;
-    material_logo.needsUpdate = true;
+
 
     var shape_logo = new THREE.Shape();
     shape_logo.moveTo(0, 0);

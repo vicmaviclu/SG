@@ -42,7 +42,7 @@ class MyEscudo extends THREE.Object3D {
     var escudo_mesh2 = new THREE.Mesh(geometriaBase2, material);
 
 
-    var material_logo = new THREE.MeshBasicMaterial();
+    var material_logo = new THREE.MeshStandardMaterial();
     material_logo.color.set(0xff0000);
 
 

@@ -56,7 +56,7 @@ class MyScene extends THREE.Scene {
     
     // this.model = new MyCircuito(this.gui, "Parametros revolucion");
     // this.add(this.model);
-    this.model = new MyOjoVolador(this.gui, "Parametros revolucion");
+    this.model = new MyCircuito(this.gui, "Parametros revolucion");
     this.add(this.model);
     // this.model = new MyOvni();
     // this.add(this.model);

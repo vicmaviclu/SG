@@ -40,7 +40,13 @@ class MyCircuito extends THREE.Object3D {
 
     const geometry = new THREE.TubeGeometry(path, 500, 0.15, 8, true);
 
-    const material = new THREE.MeshNormalMaterial({});
+    const textureLoader = new THREE.TextureLoader();
+    const asphaltTexture = textureLoader.load('/imgs/asfalto.jpg');
+    
+    const material = new THREE.MeshPhysicalMaterial({
+      map: asphaltTexture,
+      roughness: 0.8, // Ajusta este valor para cambiar la rugosidad del material
+    });
 
     const mesh = new THREE.Mesh(geometry, material);
     this.add(mesh);

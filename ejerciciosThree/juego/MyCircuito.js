@@ -45,7 +45,7 @@ class MyCircuito extends THREE.Object3D {
     
     const material = new THREE.MeshPhysicalMaterial({
       map: asphaltTexture,
-      roughness: 0.8, // Ajusta este valor para cambiar la rugosidad del material
+      roughness: 0.8,
     });
 
     const mesh = new THREE.Mesh(geometry, material);

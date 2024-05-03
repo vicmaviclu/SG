@@ -32,7 +32,6 @@ class MyOvni extends THREE.Object3D {
     // Meshes
     const mesh = new THREE.Mesh(geometry, material);
 
-    // Posicionamiento de la luz
     for (let angle = 0; angle < 2 * Math.PI; angle += Math.PI / 8) {
       const lightMesh = new THREE.Mesh(lightGeometry, lightMaterial);
       lightMesh.position.y = 0.82;

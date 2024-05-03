@@ -6,7 +6,8 @@ class MyPinchos extends THREE.Object3D {
   constructor(gui,titleGui) {
     super();
     /* MATERIAL */
-    var material = new THREE.MeshNormalMaterial();
+    var material = new THREE.MeshStandardMaterial({ color: 0x808080 }); // Color gris
+    material.metalness = 0.7;
     material.flatShading = true;
     material.needsUpdate = true;
 

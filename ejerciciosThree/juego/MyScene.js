@@ -14,6 +14,7 @@ import { MyGasolina } from './MyGasolina.js'
 import { MyPersonaje } from './MyPersonaje.js'
 import { MyEscudo } from './MyEscudo.js'
 import { MyOjoVolador } from './MyOjoVolador.js'
+import { MyReparar } from './MyReparar.js'
 
 
  
@@ -56,7 +57,7 @@ class MyScene extends THREE.Scene {
     
     // this.model = new MyCircuito(this.gui, "Parametros revolucion");
     // this.add(this.model);
-    this.model = new MyCircuito(this.gui, "Parametros revolucion");
+    this.model = new MyReparar(this.gui, "Parametros revolucion");
     this.add(this.model);
     // this.model = new MyOvni();
     // this.add(this.model);

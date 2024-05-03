@@ -6,9 +6,11 @@ class MyReparar extends THREE.Object3D {
   constructor() {
     super();
     /* MATERIAL */
-    var material = new THREE.MeshNormalMaterial();
-    material.flatShading = true;
-    material.needsUpdate = true;
+    var materialMadera = new THREE.MeshStandardMaterial({ color: 0x8B4513 }); 
+    var materialMetal = new THREE.MeshStandardMaterial({ color: 0x808080 }); 
+    materialMetal.metalness = 0.7; 
+    materialMetal.roughness = 0.5; 
+    
 
     /* GEOMETRIAS */
     // Martillo
@@ -33,14 +35,14 @@ class MyReparar extends THREE.Object3D {
 
     /* MESHES */
     // Martillo
-    var cabezaMartilloMesh = new THREE.Mesh(cabezaMartilloGeometry, material);
-    var mangoMartilloMesh = new THREE.Mesh(mangoMartilloGeometry, material);
-    var cajaMesh = new THREE.Mesh(cajaGeometry, material);
+    var cabezaMartilloMesh = new THREE.Mesh(cabezaMartilloGeometry, materialMetal);
+    var mangoMartilloMesh = new THREE.Mesh(mangoMartilloGeometry, materialMadera);
+    var cajaMesh = new THREE.Mesh(cajaGeometry, materialMetal);
 
     // Llave
-    var cabezaLlaveMesh = new THREE.Mesh(cabezaLlaveGeometry, material);
-    var quitarMesh = new THREE.Mesh(quitarGeometry, material);
-    var mangoLlaveMesh = new THREE.Mesh(mangoLlaveGeometry, material);
+    var cabezaLlaveMesh = new THREE.Mesh(cabezaLlaveGeometry, materialMetal);
+    var quitarMesh = new THREE.Mesh(quitarGeometry, materialMetal);
+    var mangoLlaveMesh = new THREE.Mesh(mangoLlaveGeometry, materialMetal);
 
     mangoLlaveMesh.rotateZ(Math.PI/2);
 
@@ -82,9 +84,11 @@ class MyReparar extends THREE.Object3D {
 
     grupoLlave.rotateX(Math.PI/2);
     
+    var grupoReparar = new THREE.Group();
+    grupoReparar.add(grupoMartillo);
+    grupoReparar.add(grupoLlave);
     /* THIS */
-    this.add(grupoLlave);
-    this.add(grupoMartillo);
+    this.add(grupoReparar);
     
   }
   update () {

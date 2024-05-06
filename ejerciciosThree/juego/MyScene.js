@@ -15,6 +15,7 @@ import { MyPersonaje } from './MyPersonaje.js'
 import { MyEscudo } from './MyEscudo.js'
 import { MyOjoVolador } from './MyOjoVolador.js'
 import { MyReparar } from './MyReparar.js'
+import { MyJuego} from './MyJuego.js'
 
 
  
@@ -55,16 +56,9 @@ class MyScene extends THREE.Scene {
     
     /*** IMPORTACIONES DE MODELOS  ***/
     
-    // this.model = new MyCircuito(this.gui, "Parametros revolucion");
-    // this.add(this.model);
-    this.model = new MyReparar(this.gui, "Parametros revolucion");
-    this.add(this.model);
-    // this.model = new MyOvni();
-    // this.add(this.model);
-    // this.model = new MyGasolina();
-    // this.add(this.model);
-    this.add(this.model);
 
+    this.model = new MyJuego();
+    this.add(this.model);
     
 
   }
@@ -250,7 +244,24 @@ class MyScene extends THREE.Scene {
     // Se actualiza el resto del modelo
     this.model.update();
 
+    let tangent = this.model.path.getTangentAt(this.model.t).normalize();
+
+    // Invertir la dirección de la tangente
+    tangent.negate();
     
+    let cameraOffset = tangent.clone().multiplyScalar(0.5); // Ajustado a 0.5 para colocar la cámara detrás del gato
+    cameraOffset.y += 0.15; // Ajusta la cámara un poco más baja
+    let cameraPosition = new THREE.Vector3().addVectors(this.model.personaje.position, cameraOffset);
+    this.camera.position.copy(cameraPosition);
+    
+    // Hacer que la cámara mire en la misma dirección que el gato
+    this.camera.lookAt(this.model.personaje.position.clone().add(tangent));
+    
+    // Hacer que la cámara mire al gato
+    this.camera.lookAt(this.model.personaje.position);
+  
+    // Hacer que la cámara mire al gato
+    this.camera.lookAt(this.model.personaje.position);
     
     // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
     this.renderer.render (this, this.getCamera());

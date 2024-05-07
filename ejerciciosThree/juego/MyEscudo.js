@@ -99,17 +99,17 @@ class MyEscudo extends THREE.Object3D {
     group_logo.translateY(-0.22);
     group_logo.translateX(0.04);
 
-    var group = new THREE.Group();
-    group.add(escudo_mesh);
-    group.add(escudo_mesh2);
-    group.add(group_logo);
+    this.group = new THREE.Group();
+    this.group.add(escudo_mesh);
+    this.group.add(escudo_mesh2);
+    this.group.add(group_logo);
 
-    this.add(group);
+    this.group.scale.set(0.75,0.75,0.75);
+    this.add(this.group);
 
   }
 
   update () {
-
   }
 }
 

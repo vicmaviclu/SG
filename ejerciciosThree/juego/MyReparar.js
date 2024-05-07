@@ -84,15 +84,16 @@ class MyReparar extends THREE.Object3D {
 
     grupoLlave.rotateX(Math.PI/2);
     
-    var grupoReparar = new THREE.Group();
-    grupoReparar.add(grupoMartillo);
-    grupoReparar.add(grupoLlave);
+    this.grupoReparar = new THREE.Group();
+    this.grupoReparar.add(grupoMartillo);
+    this.grupoReparar.add(grupoLlave);
     /* THIS */
-    this.add(grupoReparar);
+    this.add(this.grupoReparar);
     
   }
   update () {
-
+    // Actualización del objeto
+    this.grupoReparar.rotation.y += 0.025;
   }
 }
 

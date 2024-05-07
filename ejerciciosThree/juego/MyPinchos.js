@@ -12,13 +12,13 @@ class MyPinchos extends THREE.Object3D {
     material.needsUpdate = true;
 
     /* GEOMETRY */
-    var radio = 0.2;
-    var geometriaPinchos = new THREE.ConeGeometry(radio, 0.4, 32);
+    var radio = 0.2; 
+    var geometriaPinchos = new THREE.ConeGeometry(radio, 0.2, 32); // Ajustar la altura del cono
 
     /* MESHES */
     var pinchos = [];
-    var largo = 5;
-    var ancho = 4;
+    var largo = 3; 
+    var ancho = 3;
     
     for(var i = 0; i < largo; i++){
       for(var j = 0; j < ancho; j++){

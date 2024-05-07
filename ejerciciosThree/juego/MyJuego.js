@@ -74,9 +74,16 @@ class MyJuego extends THREE.Object3D {
       // Añadir el objeto a la escena y al array
       this.add(objeto);
       this.objetos.push(objeto);
+    }
 
-      
-  }
+    // Colisiones
+    this.personajeBox = new THREE.Box3().setFromObject(this.personaje);
+    var personajeBoxHelper = new THREE.Box3Helper(this.personajeBox, 0xffff00);
+    this.add(personajeBoxHelper);
+    for (let i = 0; i < this.objetos.length; i++) {
+      let objeto = this.objetos[i];
+      objeto.userData.box = new THREE.Box3().setFromObject(objeto);
+    }
 
   }
 
@@ -126,6 +133,20 @@ class MyJuego extends THREE.Object3D {
     for (let i = 0; i < this.objetos.length; i++) {
       let objeto = this.objetos[i];
       objeto.update();
+    }
+
+    // Colisiones
+    this.personajeBox.setFromObject(this.personaje);
+
+    for (let i = 0; i < this.objetos.length; i++) {
+      let objeto = this.objetos[i];
+      if (this.personajeBox.intersectsBox(objeto.userData.box)) {
+        console.log("Colisión");
+
+        this.remove(objeto);
+        this.objetos.splice(i, 1);
+        i--;
+      }
     }
   }
 }

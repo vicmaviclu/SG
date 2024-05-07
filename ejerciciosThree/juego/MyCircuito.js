@@ -41,9 +41,9 @@ class MyCircuito extends THREE.Object3D {
     const geometry = new THREE.TubeGeometry(path, 1000, 0.15, 16, true);
 
     const material = new THREE.MeshStandardMaterial({
-      color: 0x333333, 
+      color: 0xCCCCCC, 
       roughness: 0.3, 
-      metalness: 0.1, 
+      metalness: 0.5, 
     });
 
     const mesh = new THREE.Mesh(geometry, material);

@@ -2,6 +2,8 @@ import * as THREE from '../libs/three.module.js'
 import * as TWEEN from '../libs/tween.esm.js'
 import { MyCircuito } from './MyCircuito.js'
 import { MyPersonaje } from './MyPersonaje.js'
+import { MyOjoVolador } from './MyOjoVolador.js'
+
 class MyJuego extends THREE.Object3D {
   constructor(gui, titleGui) {
     super();
@@ -13,7 +15,7 @@ class MyJuego extends THREE.Object3D {
 
     this.personaje = new MyPersonaje(gui, titleGui);
     this.add(this.personaje);
-    this.personaje.scale.set(0.25, 0.25, 0.25);
+    this.personaje.scale.set(0.1, 0.1, 0.1);
     this.personaje.position.set(0,0.65,0);
     this.personaje.rotateY(Math.PI/3);
 
@@ -22,6 +24,21 @@ class MyJuego extends THREE.Object3D {
     this.t = 0;
 
 
+    // Crear ojos voladores
+    this.ojosVoladores = [];
+    let scale = this.circuito.scale.x;
+    for (let i = 0; i < this.points.length; i += 2) {
+      let ojoVolador = new MyOjoVolador(gui, titleGui);
+      ojoVolador.scale.set(0.25, 0.25, 0.25);
+    
+      let point = this.points[i];
+      let yOffset = (i % 4 < 2) ? 0.25 : -0.35; // Modificado aquí
+      let xOffset = (i % 2 === 1) ? 0.25 : -0.25;
+      let zOffset = (i % 2 === 1) ? 0.25 : -0.25;
+      ojoVolador.position.set((point.x + xOffset) * scale, (point.y + yOffset) * scale, (point.z + zOffset) * scale);
+      this.ojosVoladores.push(ojoVolador);
+      this.add(ojoVolador);
+    }
   }
 
   createGUI(gui, titleGui) {
@@ -29,26 +46,25 @@ class MyJuego extends THREE.Object3D {
   }
 
   update() {
-    if (this.t > 1) this.t = 0;
-  
-    let position = this.path.getPointAt(this.t);
-  
-    // Calcular la tangente de la curva en este punto
-    let tangent = this.path.getTangentAt(this.t).normalize();
-  
-    // Ajustar la posición del personaje
-    this.personaje.position.copy(position.multiplyScalar(3)); // Escalar la posición por el mismo factor que el circuito
-  
-    // Hacer que el personaje mire en la dirección en la que se está moviendo
-    this.personaje.lookAt(position.clone().add(tangent));
-  
-    // Mover el personaje 1.95 unidades en su eje Y local (0.65 * 3 para un circuito más grande)
-    this.personaje.translateY(0.5);
-    this.personaje.rotateY(Math.PI/2);
-  
-    // Incrementar this.t en 0.003 para que el personaje se mueva más rápido en un circuito más grande
-    this.t += 0.0001;
+    this.t = this.t % 1;
 
+  let position = this.path.getPointAt(this.t);
+
+  let tangent = this.path.getTangentAt(this.t).normalize();
+
+  this.personaje.position.copy(position.multiplyScalar(3)); 
+
+  this.personaje.lookAt(position.clone().add(tangent));
+
+  this.personaje.translateY(0.5);
+  this.personaje.rotateY(Math.PI/2);
+
+  this.t += 0.0005;
+
+  for (let ojoVolador of this.ojosVoladores) {
+    ojoVolador.update();
+    ojoVolador.lookAt(this.personaje.position);
+  }
   }
 }
 

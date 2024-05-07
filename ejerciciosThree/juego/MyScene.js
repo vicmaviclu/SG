@@ -7,14 +7,7 @@ import { TrackballControls } from '../libs/TrackballControls.js'
 import { Stats } from '../libs/stats.module.js'
 
 // Clases de mi proyecto
-import { MyCircuito } from './MyCircuito.js'
-import { MyPinchos } from './MyPinchos.js'
-import { MyOvni } from './MyOvni.js'
-import { MyGasolina } from './MyGasolina.js'
-import { MyPersonaje } from './MyPersonaje.js'
-import { MyEscudo } from './MyEscudo.js'
-import { MyOjoVolador } from './MyOjoVolador.js'
-import { MyReparar } from './MyReparar.js'
+
 import { MyJuego} from './MyJuego.js'
 
 
@@ -43,7 +36,8 @@ class MyScene extends THREE.Scene {
     this.createLights ();
     
     // Tendremos una cámara con un control de movimiento con el ratón
-    this.createCamera ();
+    this.createCamera1 ();
+    this.createCamera2 ();
     
     // Un suelo 
     this.createGround ();
@@ -60,7 +54,12 @@ class MyScene extends THREE.Scene {
     this.model = new MyJuego();
     this.add(this.model);
     
-
+    this.isThirdPersonCamera = false;
+    window.addEventListener('keydown', (event) => {
+      if (event.code === 'Space') {
+        this.isThirdPersonCamera = !this.isThirdPersonCamera;
+      }
+    });
   }
 
   initStats() {
@@ -79,28 +78,33 @@ class MyScene extends THREE.Scene {
     this.stats = stats;
   }
   
-  createCamera () {
-    // Para crear una cámara le indicamos
-    //   El ángulo del campo de visión en grados sexagesimales
-    //   La razón de aspecto ancho/alto
-    //   Los planos de recorte cercano y lejano
-    this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 50);
-    // Recuerda: Todas las unidades están en metros
-    // También se indica dónde se coloca
-    this.camera.position.set (0, 5, 7);
-    // Y hacia dónde mira
-    var look = new THREE.Vector3 (0,1.5,0);
-    this.camera.lookAt(look);
-    this.add (this.camera);
-    
-    // Para el control de cámara usamos una clase que ya tiene implementado los movimientos de órbita
-    this.cameraControl = new TrackballControls (this.camera, this.renderer.domElement);
-    // Se configuran las velocidades de los movimientos
-    this.cameraControl.rotateSpeed = 5;
-    this.cameraControl.zoomSpeed = -2;
-    this.cameraControl.panSpeed = 0.5;
-    // Debe orbitar con respecto al punto de mira de la cámara
-    this.cameraControl.target = look;
+  createCamera1 () {
+      // Crear camera1
+      this.camera1 = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 50);
+      this.camera1.position.set (0, 5, 7);
+      var look1 = new THREE.Vector3 (0,1.5,0);
+      this.camera1.lookAt(look1);
+      this.add (this.camera1);
+      this.cameraControl1 = new TrackballControls (this.camera1, this.renderer.domElement);
+      this.cameraControl1.rotateSpeed = 5;
+      this.cameraControl1.zoomSpeed = -2;
+      this.cameraControl1.panSpeed = 0.5;
+      this.cameraControl1.target = look1;
+
+  }
+
+  createCamera2 () {
+          // Crear camera2
+          this.camera2 = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 50);
+          let tangent = this.model.path.getTangentAt(this.model.t).normalize();
+          let cameraOffset = tangent.clone().multiplyScalar(-0.5); 
+          cameraOffset.y += 0.1; 
+          let cameraPosition = new THREE.Vector3().addVectors(this.model.personaje.position, cameraOffset);
+          this.camera2.position.copy(cameraPosition);
+          let lookAtPosition = this.model.personaje.position.clone();
+          lookAtPosition.y += 0.15;
+          this.camera2.lookAt(lookAtPosition);
+          this.add (this.camera2);
   }
   
   createGround () {
@@ -211,15 +215,17 @@ class MyScene extends THREE.Scene {
   getCamera () {
     // En principio se devuelve la única cámara que tenemos
     // Si hubiera varias cámaras, este método decidiría qué cámara devuelve cada vez que es consultado
-    return this.camera;
+    return this.isThirdPersonCamera ? this.camera1 : this.camera2;
   }
   
   setCameraAspect (ratio) {
     // Cada vez que el usuario modifica el tamaño de la ventana desde el gestor de ventanas de
     // su sistema operativo hay que actualizar el ratio de aspecto de la cámara
-    this.camera.aspect = ratio;
+    this.camera1.aspect = ratio;
+    this.camera2.aspect = ratio;
     // Y si se cambia ese dato hay que actualizar la matriz de proyección de la cámara
-    this.camera.updateProjectionMatrix();
+    this.camera1.updateProjectionMatrix();
+    this.camera2.updateProjectionMatrix();
   }
   
   onWindowResize () {
@@ -238,32 +244,15 @@ class MyScene extends THREE.Scene {
     // Se actualizan los elementos de la escena para cada frame
     
     // Se actualiza la posición de la cámara según su controlador
-    this.cameraControl.update();
+    this.cameraControl1.update();
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Se actualiza el resto del modelo
     this.model.update();
 
-    let tangent = this.model.path.getTangentAt(this.model.t).normalize();
-
-    // Invertir la dirección de la tangente
-    tangent.negate();
-    
-    let cameraOffset = tangent.clone().multiplyScalar(0.5); // Ajustado a 0.5 para colocar la cámara detrás del gato
-    cameraOffset.y += 0.15; // Ajusta la cámara un poco más baja
-    let cameraPosition = new THREE.Vector3().addVectors(this.model.personaje.position, cameraOffset);
-    this.camera.position.copy(cameraPosition);
-    
-    // Hacer que la cámara mire en la misma dirección que el gato
-    this.camera.lookAt(this.model.personaje.position.clone().add(tangent));
-    
-    // Hacer que la cámara mire al gato
-    this.camera.lookAt(this.model.personaje.position);
   
-    // Hacer que la cámara mire al gato
-    this.camera.lookAt(this.model.personaje.position);
-    
-    // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
+    // Camara /////////////////////////
+
     this.renderer.render (this, this.getCamera());
 
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.

@@ -1,14 +1,13 @@
 import * as THREE from '../libs/three.module.js'
 import {CSG} from '../libs/CSG-v2.js'
 
- 
 class MyPersonaje extends THREE.Object3D {
   constructor() {
     super();
     /* MATERIAL */
-    var material = new THREE.MeshNormalMaterial();
-    material.flatShading = true;
-    material.needsUpdate = true;
+    var materialBase = new THREE.MeshPhongMaterial({color: 0xFF0000}); // Rojo para la base
+    var materialEje = new THREE.MeshPhongMaterial({color: 0x000000}); // Negro para los ejes
+    var materialRueda = new THREE.MeshPhongMaterial({color: 0x000000}); // Negro para las ruedas
 
     /* SHAPES */
     // Shape de la base 
@@ -49,17 +48,17 @@ class MyPersonaje extends THREE.Object3D {
 
     /* MESHES */
     // Base
-    var base = new THREE.Mesh(geometriaBase, material);
+    var base = new THREE.Mesh(geometriaBase, materialBase);
 
     // Ejes
-    var ejeDelantero = new THREE.Mesh(geometriaEje, material);
-    var ejeTrasero = new THREE.Mesh(geometriaEje, material);
+    var ejeDelantero = new THREE.Mesh(geometriaEje, materialEje);
+    var ejeTrasero = new THREE.Mesh(geometriaEje, materialEje);
 
     // Ruedas
-    var ruedaDelanteraIzquierda = new THREE.Mesh(geometriaRueda, material);
-    var ruedaDelanteraDerecha = new THREE.Mesh(geometriaRueda, material);
-    var ruedaTraseraIzquierda = new THREE.Mesh(geometriaRueda, material);
-    var ruedaTraseraDerecha = new THREE.Mesh(geometriaRueda, material);
+    this.ruedaDelanteraIzquierda = new THREE.Mesh(geometriaRueda, materialRueda);
+    this.ruedaDelanteraDerecha = new THREE.Mesh(geometriaRueda, materialRueda);
+    this.ruedaTraseraIzquierda = new THREE.Mesh(geometriaRueda, materialRueda);
+    this.ruedaTraseraDerecha = new THREE.Mesh(geometriaRueda, materialRueda);
 
     /* POSICIONES */
     // Ejes
@@ -67,30 +66,37 @@ class MyPersonaje extends THREE.Object3D {
     ejeTrasero.translateX(-0.8);
 
     // Ruedas
-    ruedaDelanteraIzquierda.translateX(0.8);
-    ruedaDelanteraIzquierda.translateZ(-0.5);
-    ruedaDelanteraDerecha.translateX(0.8);
-    ruedaDelanteraDerecha.translateZ(0.5);
+    this.ruedaDelanteraIzquierda.translateX(0.8);
+    this.ruedaDelanteraIzquierda.translateZ(-0.5);
+    this.ruedaDelanteraDerecha.translateX(0.8);
+    this.ruedaDelanteraDerecha.translateZ(0.5);
 
-    ruedaTraseraIzquierda.translateX(-0.8);
-    ruedaTraseraIzquierda.translateZ(-0.5);
-    ruedaTraseraDerecha.translateX(-0.8);
-    ruedaTraseraDerecha.translateZ(0.5);
+    this.ruedaTraseraIzquierda.translateX(-0.8);
+    this.ruedaTraseraIzquierda.translateZ(-0.5);
+    this.ruedaTraseraDerecha.translateX(-0.8);
+    this.ruedaTraseraDerecha.translateZ(0.5);
 
     /* THIS */
-    this.add(base);
-    this.add(ejeDelantero);
-    this.add(ejeTrasero);
-    this.add(ruedaDelanteraIzquierda);
-    this.add(ruedaDelanteraDerecha);
-    this.add(ruedaTraseraIzquierda);
-    this.add(ruedaTraseraDerecha);
+    this.coche = new THREE.Group();
+    this.coche.add(base);
+    this.coche.add(ejeDelantero);
+    this.coche.add(ejeTrasero);
+    this.coche.add(this.ruedaDelanteraIzquierda);
+    this.coche.add(this.ruedaDelanteraDerecha);
+    this.coche.add(this.ruedaTraseraIzquierda);
+    this.coche.add(this.ruedaTraseraDerecha);
+
+    this.add(this.coche);
 
     this.rotateY(Math.PI / 2);
   }
 
   update () {
-
+    // Hacer que las ruedas giren
+    this.ruedaDelanteraIzquierda.rotateX(0.5);
+    this.ruedaDelanteraDerecha.rotateX(0.5);
+    this.ruedaTraseraIzquierda.rotateX(0.5);
+    this.ruedaTraseraDerecha.rotateX(0.5);
   }
 }
 

@@ -47,38 +47,34 @@ class MyJuego extends THREE.Object3D {
 
     this.objetos = [];
 
-    for (let i = 0; i < this.points.length; i += 1) {
-        let point = this.points[i];
-    
-        // Crear un objeto diferente dependiendo del valor de i
-        let objeto;
-        switch (i % 5) {
-            case 0:
-                objeto = new MyReparar();
-                break;
-            case 1:
-                objeto = new MyEscudo();
-                break;
-            case 2:
-                objeto = new MyReparar();
-                break;
-            case 3:
-                objeto = new MyOvni();
-                objeto.scale.set(0.5, 0.5, 0.5);
-                break;
-            case 4:
-                objeto = new MyPinchos();
-                break;
-        }
-        objeto.scale.set(0.25, 0.25, 0.25);
-    
-        // Posicionar el objeto alrededor del tubo
-        objeto.position.set((point.x ) * scale, (point.y + 0.2) * scale, (point.z ) * scale);
-    
-        // Añadir el objeto a la escena y al array
-        this.add(objeto);
-        this.objetos.push(objeto);
-    }
+    for (let i = 0; i < this.points.length; i += 2) {
+      let point = this.points[i];
+  
+      // Crear un objeto diferente dependiendo del valor de i
+      let objeto;
+      switch (i % 3) {
+          case 0:
+              objeto = new MyReparar();
+              break;
+          case 1:
+              objeto = new MyEscudo();
+              break;
+          case 2:
+              objeto = new MyReparar();
+              break;
+      }
+  
+      // Establecer la misma escala para todos los objetos
+      objeto.scale.set(0.25, 0.25, 0.25);
+  
+      // Posicionar el objeto
+      objeto.position.set((point.x ) * scale, (point.y + 0.2) * scale, (point.z ) * scale);
+  
+  
+      // Añadir el objeto a la escena y al array
+      this.add(objeto);
+      this.objetos.push(objeto);
+  }
 
   }
 

@@ -44,7 +44,7 @@ class MyOvni extends THREE.Object3D {
     const luzAbajo_M = new THREE.Mesh(luzAbajo, lightMaterial);
     luzAbajo_M.position.y = -0.76;
 
-    // Grupo del ojo
+    // Grupo del ovni
     this.ovni = new THREE.Group();
     this.ovni.add(mesh);
     this.ovni.add(luzAbajo_M);

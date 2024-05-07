@@ -6,10 +6,10 @@ class MyOjoVolador extends THREE.Object3D {
     this.createGUI(gui, titleGui);
 
     // Materiales
-    const eyeMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff }); // Blanco
-    const pupilMaterial = new THREE.MeshBasicMaterial({ color: 0x8B4513 }); // Marrón
-    const puntoMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 }); // Negro
-    var alasMaterial = new THREE.MeshBasicMaterial({ color: 0x66666666 }); // Negro
+    const eyeMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.99 }); // Blanco
+    const pupilMaterial = new THREE.MeshBasicMaterial({ color: 0x8B4513, transparent: true, opacity: 0.99 }); // Marrón
+    const puntoMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.99 }); // Negro
+    var alasMaterial = new THREE.MeshBasicMaterial({ color: 0x66666666, transparent: true, opacity: 0.99 }); // Negro
 
     // Geometrías
     const eyeGeometry = new THREE.SphereGeometry(0.8, 32, 32);

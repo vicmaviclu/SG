@@ -9,6 +9,7 @@ import { Stats } from '../libs/stats.module.js'
 // Clases de mi proyecto
 
 import { MyJuego} from './MyJuego.js'
+import { MyOjoVolador } from './MyOjoVolador.js'
 
 
  
@@ -58,9 +59,49 @@ class MyScene extends THREE.Scene {
       }
     });
 
-        // Tendremos una cámara con un control de movimiento con el ratón
-        this.createCamera1 ();
-        this.createCamera2 ();
+    // Tendremos una cámara con un control de movimiento con el ratón
+    this.createCamera1 ();
+    this.createCamera2 ();
+      
+    // Picking
+    this.raycaster = new THREE.Raycaster();
+    this.mouse = new THREE.Vector2();
+
+    window.addEventListener('click', (event) => {
+      // Actualizar las coordenadas del ratón
+      this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    
+      // Actualizar el rayo del raycaster
+      this.raycaster.setFromCamera(this.mouse, this.getCamera());
+    
+      // Obtener los ojos voladores desde MyJuego
+      let ojosVoladores = this.model.getOjosVoladores();
+    
+      // Obtener los objetos que intersectan con el rayo
+      let intersects = this.raycaster.intersectObjects(ojosVoladores, true);
+      console.log("Intersects: ", intersects);
+    
+      // Si hay alguna intersección
+      if (intersects.length > 0) {
+        // Obtener el primer objeto que intersecta
+        let firstObject = intersects[0].object;
+        // Buscar el objeto MyOjoVolador padre
+        while (firstObject.parent && !(firstObject instanceof MyOjoVolador)) {
+          firstObject = firstObject.parent;
+        }
+        console.log("First object: ", firstObject);
+    
+        // Encontrar el índice del objeto en el array de ojos voladores
+        let index = ojosVoladores.indexOf(firstObject);
+        console.log("Index: ", index);
+    
+        // Si el objeto está en el array (index != -1), eliminarlo
+        if (index !== -1) {
+          this.model.removeOjoVolador(index);
+        }
+      }
+    }, false);
   }
 
   initStats() {

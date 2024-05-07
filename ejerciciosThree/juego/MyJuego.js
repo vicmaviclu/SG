@@ -74,12 +74,24 @@ class MyJuego extends THREE.Object3D {
       // Añadir el objeto a la escena y al array
       this.add(objeto);
       this.objetos.push(objeto);
+
+      
   }
 
   }
 
   createGUI(gui, titleGui) {
     // GUI code here
+  }
+
+  getOjosVoladores() {
+    return this.ojosVoladores;
+  }
+
+  removeOjoVolador(index) {
+    this.remove(this.ojosVoladores[index]);
+    this.ojosVoladores.splice(index, 1);
+    console.log(this.ojosVoladores);
   }
 
   update() {

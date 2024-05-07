@@ -34,10 +34,7 @@ class MyScene extends THREE.Scene {
     // Todo elemento que se desee sea tenido en cuenta en el renderizado de la escena debe pertenecer a esta. Bien como hijo de la escena (this en esta clase) o como hijo de un elemento que ya esté en la escena.
     // Tras crear cada elemento se añadirá a la escena con   this.add(variable)
     this.createLights ();
-    
-    // Tendremos una cámara con un control de movimiento con el ratón
-    this.createCamera1 ();
-    this.createCamera2 ();
+  
     
     // Un suelo 
     this.createGround ();
@@ -60,6 +57,10 @@ class MyScene extends THREE.Scene {
         this.isThirdPersonCamera = !this.isThirdPersonCamera;
       }
     });
+
+        // Tendremos una cámara con un control de movimiento con el ratón
+        this.createCamera1 ();
+        this.createCamera2 ();
   }
 
   initStats() {
@@ -94,17 +95,9 @@ class MyScene extends THREE.Scene {
   }
 
   createCamera2 () {
-          // Crear camera2
-          this.camera2 = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 50);
-          let tangent = this.model.path.getTangentAt(this.model.t).normalize();
-          let cameraOffset = tangent.clone().multiplyScalar(-0.5); 
-          cameraOffset.y += 0.1; 
-          let cameraPosition = new THREE.Vector3().addVectors(this.model.personaje.position, cameraOffset);
-          this.camera2.position.copy(cameraPosition);
-          let lookAtPosition = this.model.personaje.position.clone();
-          lookAtPosition.y += 0.15;
-          this.camera2.lookAt(lookAtPosition);
-          this.add (this.camera2);
+// En el método de creación de la cámara
+this.camera2 = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 50);
+this.add (this.camera2);
   }
   
   createGround () {
@@ -215,7 +208,7 @@ class MyScene extends THREE.Scene {
   getCamera () {
     // En principio se devuelve la única cámara que tenemos
     // Si hubiera varias cámaras, este método decidiría qué cámara devuelve cada vez que es consultado
-    return this.isThirdPersonCamera ? this.camera1 : this.camera2;
+    return this.isThirdPersonCamera ? this.camera2 : this.camera1;
   }
   
   setCameraAspect (ratio) {
@@ -252,7 +245,7 @@ class MyScene extends THREE.Scene {
 
   
     // Camara /////////////////////////
-
+    this.updateCamera2Position();
     this.renderer.render (this, this.getCamera());
 
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
@@ -260,6 +253,18 @@ class MyScene extends THREE.Scene {
     // Si no existiera esta línea,  update()  se ejecutaría solo la primera vez.
     requestAnimationFrame(() => this.update())
   }
+
+  updateCamera2Position() {
+    let tangent = this.model.path.getTangentAt(this.model.t).normalize();
+    let cameraOffset = tangent.clone().multiplyScalar(-0.5); 
+    cameraOffset.y += 0.1; 
+    let cameraPosition = new THREE.Vector3().addVectors(this.model.personaje.position, cameraOffset);
+    this.camera2.position.copy(cameraPosition);
+    let lookAtPosition = this.model.personaje.position.clone();
+    lookAtPosition.y += 0.15;
+    this.camera2.lookAt(lookAtPosition);
+}
+
 }
 
 /// La función   main

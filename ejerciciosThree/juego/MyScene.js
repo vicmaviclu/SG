@@ -8,7 +8,7 @@ import { Stats } from '../libs/stats.module.js'
 
 // Clases de mi proyecto
 
-import { MyJuego} from './MyJuego.js'
+import { MyJuego} from './MyJuego copy.js'
 
 
  
@@ -31,6 +31,10 @@ class MyScene extends THREE.Scene {
     
     // Construimos los distinos elementos que tendremos en la escena
     
+    // Tendremos una cámara con un control de movimiento con el ratón
+    this.createCamera1 ();
+    this.createCamera2 ();
+
     // Todo elemento que se desee sea tenido en cuenta en el renderizado de la escena debe pertenecer a esta. Bien como hijo de la escena (this en esta clase) o como hijo de un elemento que ya esté en la escena.
     // Tras crear cada elemento se añadirá a la escena con   this.add(variable)
     this.createLights ();
@@ -58,9 +62,32 @@ class MyScene extends THREE.Scene {
       }
     });
 
-        // Tendremos una cámara con un control de movimiento con el ratón
-        this.createCamera1 ();
-        this.createCamera2 ();
+    this.angle = 0;
+    this.keyPressed = false;
+    
+    window.addEventListener('keydown', (event) => {
+      if (!this.keyPressed) {
+        switch (event.key) {
+          case 'ArrowLeft':
+            this.angle -= 5;
+            this.keyPressed = true;
+            break;
+          case 'ArrowRight':
+            this.angle += 5;
+            this.keyPressed = true;
+            break;
+        }
+      }
+    });
+    
+    window.addEventListener('keyup', function(event) {
+      switch (event.key) {
+        case 'ArrowLeft':
+        case 'ArrowRight':
+          this.keyPressed = false;
+          break;
+      }
+    });
   }
 
   initStats() {
@@ -241,7 +268,7 @@ this.add (this.camera2);
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Se actualiza el resto del modelo
-    this.model.update();
+    this.model.update(this.angle, this.keyPressed);
 
   
     // Camara /////////////////////////

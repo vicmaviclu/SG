@@ -12,12 +12,12 @@ class MyEscudo extends THREE.Object3D {
     /* SHAPES */
     // Shape de la base 
     var shape = new THREE.Shape();
-    shape.moveTo(0, 1.5); // Ajustado de 2 a 1.5
+    shape.moveTo(0, 1.5); 
     shape.lineTo(0, 0);
     shape.bezierCurveTo(0, 0, 1, -1, 2, 0);
-    shape.lineTo(2, 1.5); // Ajustado de 2 a 1.5
-    shape.lineTo(1, 2); // Ajustado de 2.5 a 2
-    shape.lineTo(0, 1.5); // Ajustado de 2 a 1.5
+    shape.lineTo(2, 1.5); 
+    shape.lineTo(1, 2); 
+    shape.lineTo(0, 1.5); 
 
     /* EXTRUDES */
     // Opciones de extrude de la base
@@ -99,17 +99,17 @@ class MyEscudo extends THREE.Object3D {
     group_logo.translateY(-0.22);
     group_logo.translateX(0.04);
 
-    var group = new THREE.Group();
-    group.add(escudo_mesh);
-    group.add(escudo_mesh2);
-    group.add(group_logo);
+    this.group = new THREE.Group();
+    this.group.add(escudo_mesh);
+    this.group.add(escudo_mesh2);
+    this.group.add(group_logo);
 
-    this.add(group);
+    this.group.scale.set(0.75,0.75,0.75);
+    this.add(this.group);
 
   }
 
   update () {
-
   }
 }
 

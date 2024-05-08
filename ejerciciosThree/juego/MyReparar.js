@@ -87,6 +87,9 @@ class MyReparar extends THREE.Object3D {
     this.grupoReparar = new THREE.Group();
     this.grupoReparar.add(grupoMartillo);
     this.grupoReparar.add(grupoLlave);
+
+    this.grupoReparar.translateY(0.5);
+
     /* THIS */
     this.add(this.grupoReparar);
     

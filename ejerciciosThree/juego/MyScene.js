@@ -8,7 +8,7 @@ import { Stats } from '../libs/stats.module.js'
 
 // Clases de mi proyecto
 
-import { MyJuego} from './MyJuego copy.js'
+import { MyJuego} from './MyJuego.js'
 import { MyOjoVolador } from './MyOjoVolador.js'
 
 

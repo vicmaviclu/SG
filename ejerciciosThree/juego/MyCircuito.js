@@ -38,7 +38,8 @@ class MyCircuito extends THREE.Object3D {
 
     const path = new THREE.CatmullRomCurve3(this.points, true);
 
-    const geometry = new THREE.TubeGeometry(path, 1000, 0.15, 16, true);
+    this.radio = 0.15;
+    const geometry = new THREE.TubeGeometry(path, 1000, this.radio, 16, true);
 
     const material = new THREE.MeshStandardMaterial({
       color: 0xCCCCCC, 
@@ -52,6 +53,10 @@ class MyCircuito extends THREE.Object3D {
 
   getPoints() {
     return this.points;
+  }
+
+  getRadio() {
+    return this.radio;
   }
 
   createGUI(gui, titleGui) {

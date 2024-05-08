@@ -105,6 +105,10 @@ class MyEscudo extends THREE.Object3D {
     this.group.add(group_logo);
 
     this.group.scale.set(0.75,0.75,0.75);
+
+    this.group.translateX(-0.8);
+    this.group.translateY(0.43);
+
     this.add(this.group);
 
   }

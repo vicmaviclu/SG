@@ -23,7 +23,7 @@ class MyPinchos extends THREE.Object3D {
     for(var i = 0; i < largo; i++){
       for(var j = 0; j < ancho; j++){
         var pincho = new THREE.Mesh(geometriaPinchos, material);
-        pincho.position.set(i*(radio+radio), 0, j*(radio+radio));
+        pincho.position.set(i*(radio+radio), 0.1, j*(radio+radio));
         pinchos.push(pincho);
       }
     }

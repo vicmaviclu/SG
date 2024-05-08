@@ -15,7 +15,7 @@ class MyGasolina extends THREE.Object3D {
     /* CARGAR OBJETO */
     var objLoader = new OBJLoader();
 
-    objLoader.load('../models/gasolina/gascanhp.obj',
+    objLoader.load('../../models/gasolina/gascanhp.obj',
         (object) => {
             object.traverse( (child) => {
                 if ( child instanceof THREE.Mesh ) {
@@ -23,11 +23,12 @@ class MyGasolina extends THREE.Object3D {
                 }
             });
             this.add(object);
+            this.userData.box = new THREE.Box3().setFromObject(this);
         });
   }
   
   update () {
-
+    this.userData.box.setFromObject(this);
   }
 }
 

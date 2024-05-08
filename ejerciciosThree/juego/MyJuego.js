@@ -21,9 +21,6 @@ class MyJuego extends THREE.Object3D {
 
     this.personaje = new MyPersonaje(gui, titleGui);
     this.add(this.personaje);
-    this.personaje.scale.set(0.1, 0.1, 0.1);
-    this.personaje.position.set(0,0.65,0);
-    this.personaje.rotateY(Math.PI/3);
 
     this.points = this.circuito.getPoints();
     this.path = new THREE.CatmullRomCurve3(this.points, true);
@@ -143,6 +140,12 @@ class MyJuego extends THREE.Object3D {
       this.add(boxHelper);
     }
 
+    /****************** ANIMACION *********************/
+    // Inicializar this.origen antes de llamar a this.setupAnimation();
+    this.origen = { t: 0 };
+
+    this.setupAnimation();
+
   }
 
   createGUI(gui, titleGui) {
@@ -159,21 +162,63 @@ class MyJuego extends THREE.Object3D {
     console.log(this.ojosVoladores);
   }
 
-  update() {
-    this.t = this.t % 1;
+  setupAnimation() {
+    this.segmentos = 500;
+    this.frenetFrames = this.path.computeFrenetFrames(this.segmentos, true);
 
-    let position = this.path.getPointAt(this.t);
+    var fin = { t: this.origen.t + 0.00001 }; 
+    var tiempoDeRecorrido = 0.005; 
 
-    let tangent = this.path.getTangentAt(this.t).normalize();
+    // Animación: seguir un camino recto
+    this.animacion = new TWEEN.Tween(this.origen).to(fin, tiempoDeRecorrido)
+    .onUpdate(() => {
+        this.t = this.origen.t;
 
-    this.personaje.position.copy(position.multiplyScalar(3)); 
+    
+        let position = this.path.getPointAt(this.t);
+            
+        let tangent = this.path.getTangentAt(this.t).normalize();
+    
+        this.personaje.position.copy(position.multiplyScalar(3)); 
+        
+        // Hacer que el personaje mire hacia el frente en la dirección del camino
+        let lookAtPosition = position.clone().add(tangent);
+        this.personaje.lookAt(lookAtPosition);
 
-    this.personaje.lookAt(position.clone().add(tangent));
+        this.personaje.rotateY(Math.PI / 1.75);  
+    })    
+    .onComplete(() => {
+      if (this.origen.t > 0.999) {
+          this.origen.t = 0;
+      } else {
+          this.origen.t += 0.0001; 
+      }
+    });
+    this.animacion.start();
+  }
 
-    this.personaje.translateY(0.5);
-    this.personaje.rotateY(Math.PI/2);
+  update(teclaDerecha, teclaIzquierda) {
+    // this.t = this.t % 1;
 
-    this.t += 0.00025;
+    // let position = this.path.getPointAt(this.t);
+
+    // let tangent = this.path.getTangentAt(this.t).normalize();
+
+    // this.personaje.position.copy(position.multiplyScalar(3)); 
+
+    // this.personaje.lookAt(position.clone().add(tangent));
+
+    // this.personaje.translateY(0.5);
+    // this.personaje.rotateY(Math.PI/2);
+
+    // this.t += 0.00025;
+
+    // Actualización del juego aquí
+    TWEEN.update();
+    if (!this.animacion.isPlaying()) {
+        this.setupAnimation();
+    }
+    this.personaje.update(teclaDerecha, teclaIzquierda);
 
     // Movimiento de los ojos
     for (let i = 0; i < this.ojosVoladores.length; i++) {

@@ -68,9 +68,9 @@ class MyJuego extends THREE.Object3D {
       } else {
           this.origen.t += 0.0001; 
       }
-  });
+    });
     this.animacion.start();
-}
+  }
 
   update(teclaDerecha, teclaIzquierda) {
     // Actualización del juego aquí

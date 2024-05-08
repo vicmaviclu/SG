@@ -19,22 +19,17 @@ class MyJuego extends THREE.Object3D {
     this.circuito.scale.set(3,3,3);
     this.add(this.circuito);
 
-    // Creación del personaje
     this.personaje = new MyPersonaje(gui, titleGui);
     this.add(this.personaje);
-    this.personaje.scale.set(0.1, 0.1, 0.1);
-    this.personaje.position.set(0, 0.5, 0);
 
-    // Configuración del camino
     this.points = this.circuito.getPoints();
     this.path = new THREE.CatmullRomCurve3(this.points, true);
     this.t = 0;
 
-    // Creación de los ojos voladores
+    // Inicializar this.origen antes de llamar a this.setupAnimation();
+    this.origen = { t: 0 };
 
     // Creación de los objetos
-
-    // Configuración de la animación
     this.setupAnimation();
   }
 
@@ -42,21 +37,18 @@ class MyJuego extends THREE.Object3D {
     // Código de la GUI aquí
   }
 
-
-
-
   setupAnimation() {
-    this.segmentos = 100;
+    this.segmentos = 500;
     this.frenetFrames = this.path.computeFrenetFrames(this.segmentos, true);
 
-    var origen = { t: 0 };
-    var fin = { t: 1 };
-    var tiempoDeRecorrido = 50000; // 50000 ms = 50 segundos
+    var fin = { t: this.origen.t + 0.00001 }; 
+    var tiempoDeRecorrido = 0.005; 
 
     // Animación: seguir un camino recto
-    this.animacion = new TWEEN.Tween(origen).to(fin, tiempoDeRecorrido)
+    this.animacion = new TWEEN.Tween(this.origen).to(fin, tiempoDeRecorrido)
     .onUpdate(() => {
-        this.t = origen.t;
+        this.t = this.origen.t;
+
     
         let position = this.path.getPointAt(this.t);
             
@@ -68,20 +60,25 @@ class MyJuego extends THREE.Object3D {
         let lookAtPosition = position.clone().add(tangent);
         this.personaje.lookAt(lookAtPosition);
 
-        this.personaje.translateY(0.47);
-        this.personaje.rotateY(Math.PI / 2);
-    });
-
+        this.personaje.rotateY(Math.PI / 1.75);  
+    })    
+    .onComplete(() => {
+      if (this.origen.t > 0.999) {
+          this.origen.t = 0;
+      } else {
+          this.origen.t += 0.0001; 
+      }
+  });
     this.animacion.start();
 }
 
-
-
-  update(angle, keyPressed) {
+  update(teclaDerecha, teclaIzquierda) {
+    // Actualización del juego aquí
     TWEEN.update();
-    // Actualización de los ojos voladores
-
-
+    if (!this.animacion.isPlaying()) {
+        this.setupAnimation();
+    }
+    this.personaje.update(teclaDerecha, teclaIzquierda);
   }
 }
 

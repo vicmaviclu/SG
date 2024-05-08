@@ -1,5 +1,7 @@
 import * as THREE from '../libs/three.module.js'
 import {CSG} from '../libs/CSG-v2.js'
+import * as TWEEN from '../libs/tween.esm.js'
+
 
 class MyPersonaje extends THREE.Object3D {
   constructor() {
@@ -87,16 +89,91 @@ class MyPersonaje extends THREE.Object3D {
     this.coche.add(this.ruedaTraseraDerecha);
 
     this.add(this.coche);
+    this.coche.position.set(0, 0.45, 0);
+    this.coche.rotateY(-0.3);
+    this.coche.scale.set(0.05, 0.05, 0.05);
 
-    this.rotateY(Math.PI / 2);
+    this.origen = { angle: Math.PI / 2 }; // Mover la inicialización del ángulo de origen al constructor
+
   }
 
-  update () {
+    setupRotationAnimationDerecha() {
+      var radio = 0.47; // Radio del tubo escalado
+      var fin = { angle: this.origen.angle + 2 * (Math.PI / 180) }; // 5 grados en radianes
+      var tiempoDeRecorrido = 5; // 500 ms = 0.5 segundos
+
+      // El centro del círculo es la posición actual del coche menos el radio en la dirección Y
+      var centro = new THREE.Vector3(
+          this.coche.position.x,
+          this.coche.position.y - radio * Math.sin(this.origen.angle),
+          this.coche.position.z - radio * Math.cos(this.origen.angle)
+      );
+
+      // Animación: girar alrededor del radio del tubo
+      this.rotacionAnimacion = new TWEEN.Tween(this.origen).to(fin, tiempoDeRecorrido)
+      .onUpdate(() => {
+          let angle = this.origen.angle;
+          this.currentAngle = angle;
+
+          // Calcular la nueva posición del coche en la superficie del tubo
+          let posicionTubo = new THREE.Vector3(
+              centro.x,
+              centro.y + radio * Math.sin(angle),
+              centro.z + radio * Math.cos(angle)
+          );
+
+          // Actualizar la posición del coche
+          this.coche.position.copy(posicionTubo);
+                  
+      });
+      this.rotacionAnimacion.start();
+  }
+  setupRotationAnimationIzquierda() {
+    var radio = 0.47; // Radio del tubo escalado
+    var fin = { angle: this.origen.angle - 2 * (Math.PI / 180) }; // 25 grados en radianes
+    var tiempoDeRecorrido = 5; // 50 ms
+
+    // El centro del círculo es la posición actual del coche menos el radio en la dirección Y
+    var centro = new THREE.Vector3(
+        this.coche.position.x,
+        this.coche.position.y - radio * Math.sin(this.origen.angle),
+        this.coche.position.z - radio * Math.cos(this.origen.angle)
+    );
+
+    // Animación: girar alrededor del radio del tubo
+    this.rotacionAnimacion = new TWEEN.Tween(this.origen).to(fin, tiempoDeRecorrido)
+    .onUpdate(() => {
+        let angle = this.origen.angle;
+
+        // Calcular la nueva posición del coche en la superficie del tubo
+        let posicionTubo = new THREE.Vector3(
+            centro.x,
+            centro.y + radio * Math.sin(angle),
+            centro.z + radio * Math.cos(angle)
+        );
+
+        // Actualizar la posición del coche
+        this.coche.position.copy(posicionTubo);
+                
+    });
+    this.rotacionAnimacion.start();
+  }
+  update (teclaDerecha, teclaIzquierda) {
     // Hacer que las ruedas giren
-    this.ruedaDelanteraIzquierda.rotateX(0.5);
-    this.ruedaDelanteraDerecha.rotateX(0.5);
-    this.ruedaTraseraIzquierda.rotateX(0.5);
-    this.ruedaTraseraDerecha.rotateX(0.5);
+    this.ruedaDelanteraIzquierda.rotateZ(0.5);
+    this.ruedaDelanteraDerecha.rotateZ(0.5);
+    this.ruedaTraseraIzquierda.rotateZ(0.5);
+    this.ruedaTraseraDerecha.rotateZ(0.5);
+
+    TWEEN.update();
+    if(teclaDerecha && (!this.rotacionAnimacion || !this.rotacionAnimacion.isPlaying())){
+      this.setupRotationAnimationDerecha();
+      teclaDerecha = false;
+    }
+    if(teclaIzquierda && (!this.rotacionAnimacion || !this.rotacionAnimacion.isPlaying())){
+      this.setupRotationAnimationIzquierda();
+      teclaIzquierda = false;
+    }
   }
 }
 

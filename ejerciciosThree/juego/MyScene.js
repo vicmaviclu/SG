@@ -10,6 +10,7 @@ import { Stats } from '../libs/stats.module.js'
 
 import { MyJuego} from './MyJuego copy.js'
 import { MyOjoVolador } from './MyOjoVolador.js'
+import { MyPersonaje } from './MyPersonaje.js'
 
 
  
@@ -52,11 +53,11 @@ class MyScene extends THREE.Scene {
     
     /*** IMPORTACIONES DE MODELOS  ***/
     
-
     this.model = new MyJuego();
     this.add(this.model);
-    
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////77777
   // Picking
   this.raycaster = new THREE.Raycaster();
   this.mouse = new THREE.Vector2();
@@ -97,6 +98,8 @@ class MyScene extends THREE.Scene {
     }
   }, false);
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Movimiento personaje y camara
     this.isThirdPersonCamera = false;
     window.addEventListener('keydown', (event) => {
       if (event.code === 'Space') {
@@ -104,29 +107,29 @@ class MyScene extends THREE.Scene {
       }
     });
 
-    this.angle = 0;
-    this.keyPressed = false;
+    this.teclaDerecha = false;
+    this.teclaIzquierda = false;
     
     window.addEventListener('keydown', (event) => {
       if (!this.keyPressed) {
         switch (event.key) {
           case 'ArrowLeft':
-            this.angle -= 5;
-            this.keyPressed = true;
+            this.teclaIzquierda = true;
             break;
           case 'ArrowRight':
-            this.angle += 5;
-            this.keyPressed = true;
+            this.teclaDerecha = true;
             break;
         }
       }
     });
     
-    window.addEventListener('keyup', function(event) {
+    window.addEventListener('keyup', (event) => {
       switch (event.key) {
         case 'ArrowLeft':
+          this.teclaIzquierda = false;
+          break;
         case 'ArrowRight':
-          this.keyPressed = false;
+          this.teclaDerecha = false;
           break;
       }
     });
@@ -164,9 +167,9 @@ class MyScene extends THREE.Scene {
   }
 
   createCamera2 () {
-// En el método de creación de la cámara
-this.camera2 = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 50);
-this.add (this.camera2);
+    // En el método de creación de la cámara
+    this.camera2 = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 50);
+    this.add (this.camera2);
   }
   
   createGround () {
@@ -310,8 +313,7 @@ this.add (this.camera2);
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Se actualiza el resto del modelo
-    this.model.update(this.angle, this.keyPressed);
-
+    this.model.update(this.teclaDerecha, this.teclaIzquierda);
   
     // Camara /////////////////////////
     this.updateCamera2Position();
@@ -325,12 +327,12 @@ this.add (this.camera2);
 
   updateCamera2Position() {
     let tangent = this.model.path.getTangentAt(this.model.t).normalize();
-    let cameraOffset = tangent.clone().multiplyScalar(-0.5); 
-    cameraOffset.y += 0.1; 
+    let cameraOffset = tangent.clone().multiplyScalar(-0.3); 
+    cameraOffset.y = 0.55; 
     let cameraPosition = new THREE.Vector3().addVectors(this.model.personaje.position, cameraOffset);
     this.camera2.position.copy(cameraPosition);
     let lookAtPosition = this.model.personaje.position.clone();
-    lookAtPosition.y += 0.15;
+    lookAtPosition.y = 0.2;
     this.camera2.lookAt(lookAtPosition);
 }
 

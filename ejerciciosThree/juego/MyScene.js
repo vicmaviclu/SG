@@ -64,7 +64,7 @@ class MyScene extends THREE.Scene {
 
     window.addEventListener('click', (event) => {
       // Solo se puede hacer picking si esta en tercera persona
-      if (this.isThirdPersonCamera) {
+      //if (this.isThirdPersonCamera) {
         // Actualizar las coordenadas del ratón
         this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -92,9 +92,11 @@ class MyScene extends THREE.Scene {
     
           if (index !== -1) {
             this.model.removeOjoVolador(index);
+            this.model.setPuntuacion(5);
+            console.log("Puntuación: ", this.model.puntuacion);
           }
         }
-      }
+      //}
     }, false);
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -204,7 +206,11 @@ class MyScene extends THREE.Scene {
       // En el contexto de una función   this   alude a la función
       lightPower : 500.0,  // La potencia de esta fuente de luz se mide en lúmenes
       ambientIntensity : 0.5,   
-      axisOnOff : true
+      axisOnOff : true,
+      puntuacion: 0,
+      ruedaIzquierda: true,
+      ruedaDerecha: true,
+      escudo: false
     }
 
     // Se crea una sección para los controles de esta clase
@@ -225,6 +231,25 @@ class MyScene extends THREE.Scene {
       .name ('Mostrar ejes : ')
       .onChange ( (value) => this.setAxisVisible (value) );
     
+    // Puntuacion
+    gui.add(this.guiControls, 'puntuacion')
+      .name('Puntuación: ')
+      .listen();
+    
+    // Ruedas
+    gui.add(this.guiControls, 'ruedaIzquierda')
+      .name('Rueda izquierda: ')
+      .listen();
+    
+    gui.add(this.guiControls, 'ruedaDerecha')
+      .name('Rueda derecha: ')
+      .listen();
+    
+    // Escudo
+    gui.add(this.guiControls, 'escudo')
+      .name('Escudo: ')
+      .listen();
+
     return gui;
   }
   
@@ -316,9 +341,14 @@ class MyScene extends THREE.Scene {
     this.model.update(this.teclaDerecha, this.teclaIzquierda, this.isThirdPersonCamera);
   
     // Camara /////////////////////////
-    
     this.updateCamera2Position();
     this.renderer.render (this, this.getCamera());
+
+    // Interfaz /////////////////////////
+    this.guiControls.puntuacion = this.model.getPuntuacion();
+    this.guiControls.ruedaIzquierda = this.model.getCanTurnLeft();
+    this.guiControls.ruedaDerecha = this.model.getCanTurnRight();
+    this.guiControls.escudo = this.model.getEscudo();
 
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
     // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
@@ -327,7 +357,19 @@ class MyScene extends THREE.Scene {
   }
 
   updateCamera2Position() {
-    
+    // Actualizar la posición de la cámara en tercera persona
+    let idealOffset = new THREE.Vector3(-2, 2, 0);
+
+    // Calcular la posición ideal de la cámara en función de la posición del personaje
+    let cameraPosition = new THREE.Vector3().addVectors(this.model.personaje.position, idealOffset);
+
+    // Actualizar la posición de la cámara
+    this.camera2.position.lerp(cameraPosition, 0.1); // El segundo parámetro controla la velocidad de la cámara
+
+    // Hacer que la cámara mire al personaje
+    this.camera2.lookAt(this.model.personaje.position);
+
+
     // let tangent = this.model.path.getTangentAt(this.model.t).normalize();
     // let cameraOffset = tangent.clone().multiplyScalar(-0.3); 
     // cameraOffset.y = 0.55; 

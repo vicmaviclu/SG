@@ -111,6 +111,13 @@ class MyJuego extends THREE.Object3D {
     // Puntuacion
     this.puntuacion = 0;
 
+    // Control personaje puede girar
+    this.canTurnLeft = true;
+    this.canTurnRight = true;
+
+    // Escudo
+    this.escudo = false;
+
     /***************** COLISIONES **********************/
     this.personajeBox = new THREE.Box3().setFromObject(this.personaje);
     var personajeBoxHelper = new THREE.Box3Helper(this.personajeBox, 0xffff00);
@@ -125,6 +132,7 @@ class MyJuego extends THREE.Object3D {
     /****************** ANIMACION *********************/
     // Inicializar this.origen antes de llamar a this.setupAnimation();
     this.origen = { t: 0 };
+    this.velocidad = 0.005;
 
     this.setupAnimation();
 
@@ -134,14 +142,34 @@ class MyJuego extends THREE.Object3D {
     // GUI code here
   }
 
+  getPuntuacion() {
+    return this.puntuacion;
+  }
+
+  getCanTurnLeft() {
+    return this.canTurnLeft;
+  }
+  
+  getCanTurnRight() {
+    return this.canTurnRight;
+  }
+
+  getEscudo() {
+    return this.escudo;
+  }
+
   getOjosVoladores() {
     return this.ojosVoladores;
   }
 
   removeOjoVolador(index) {
-    this.remove(this.ojosVoladores[index]);
-    this.ojosVoladores.splice(index, 1);
-    console.log(this.ojosVoladores);
+    let ojoVolador = this.ojosVoladores[index];
+    ojoVolador.visible = false;
+
+    setTimeout(() => {
+      ojoVolador.visible = true;
+      this.add(ojoVolador);
+    }, 5000);
   }
 
   setupAnimation() {
@@ -149,7 +177,7 @@ class MyJuego extends THREE.Object3D {
     this.frenetFrames = this.path.computeFrenetFrames(this.segmentos, true);
 
     var fin = { t: this.origen.t + 0.00001 }; 
-    var tiempoDeRecorrido = 0.005; 
+    var tiempoDeRecorrido = this.velocidad; 
 
     // Animación: seguir un camino recto
     this.animacion = new TWEEN.Tween(this.origen).to(fin, tiempoDeRecorrido)
@@ -188,7 +216,7 @@ class MyJuego extends THREE.Object3D {
         this.setupAnimation();
     }
     if(isThirdPersonCamera){
-      this.personaje.update(teclaDerecha, teclaIzquierda);
+      this.personaje.update(teclaDerecha && this.canTurnRight, teclaIzquierda && this.canTurnLeft);
     }
 
     // Movimiento de los ojos ////////////////////////////
@@ -217,13 +245,43 @@ class MyJuego extends THREE.Object3D {
         console.log("Colisión");
 
         if(objeto instanceof MyGasolina){
-          this.puntuacion += 3;
+          this.setPuntuacion(5);
+          this.velocidad -= 0.001;
+          console.log("Velocidad: " + this.velocidad);
           console.log("Colision Gasolina");
           console.log("puntuacion: " + this.puntuacion);
         } else if(objeto instanceof MyOvni){
-          this.puntuacion -= 5;
-          console.log("Colision Ovni");
-          console.log("puntuacion: " + this.puntuacion);
+          if(this.escudo){
+            this.escudo = false;
+            console.log("Escudo desactivado");
+          } else {
+            this.setPuntuacion(-5);
+            this.velocidad += 0.001;
+            console.log("Velocidad: " + this.velocidad);
+            console.log("Colision Ovni");
+            console.log("puntuacion: " + this.puntuacion);
+          }
+        } else if (objeto instanceof MyPinchos){
+          if (this.escudo) {
+            this.escudo = false;
+            console.log("Escudo desactivado");
+          } else if(this.canTurnLeft && this.canTurnRight){
+              if(Math.random() < 0.5){
+                this.canTurnLeft = false;
+              } else {
+                this.canTurnRight = false;
+              }
+          }
+        } else if (objeto instanceof MyReparar){
+          if(!this.canTurnLeft || !this.canTurnRight){
+            this.canTurnLeft = true;
+            this.canTurnRight = true;
+          }
+        } else if (objeto instanceof MyEscudo){
+          if (this.escudo === false) {
+            this.escudo = true;
+            console.log("Escudo activado");
+          }
         }
 
         objeto.visible = false;
@@ -236,6 +294,13 @@ class MyJuego extends THREE.Object3D {
           this.objetos.push(objeto);
         }, 5000);
       }
+    }
+  }
+  setPuntuacion(puntos) {
+    if(this.puntuacion + puntos < 0){
+      this.puntuacion = 0;
+    } else {
+      this.puntuacion += puntos;
     }
   }
 

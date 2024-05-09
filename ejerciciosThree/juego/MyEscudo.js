@@ -109,6 +109,7 @@ class MyEscudo extends THREE.Object3D {
     this.group.translateX(-0.8);
     this.group.translateY(0.43);
 
+    this.group.scale.set(0.5,0.5,0.5);
     this.add(this.group);
 
   }

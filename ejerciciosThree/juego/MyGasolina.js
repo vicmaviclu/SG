@@ -1,6 +1,4 @@
 import * as THREE from '../libs/three.module.js'
-import {CSG} from '../libs/CSG-v2.js'
-import { MTLLoader } from '../libs/MTLLoader.js'
 import { OBJLoader } from '../libs/OBJLoader.js'
 
  
@@ -22,9 +20,11 @@ class MyGasolina extends THREE.Object3D {
                     child.material = material;
                 }
             });
+            object.scale.set(0.25, 0.25, 0.25);
             this.add(object);
             this.userData.box = new THREE.Box3().setFromObject(this);
         });
+    
   }
   
   update () {

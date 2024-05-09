@@ -35,7 +35,7 @@ class MyJuego extends THREE.Object3D {
       ojoVolador.scale.set(0.25, 0.25, 0.25);
     
       let point = this.points[i];
-      let yOffset = (i % 4 < 2) ? 0.35 : -0.30; 
+      let yOffset = (i % 4 < 2) ? 0.3 : -0.30; 
       let xOffset = (i % 2 === 1) ? 0.25 : -0.25;
       ojoVolador.position.set((point.x + xOffset) * scale, (point.y + yOffset) * scale, (point.z ) * scale);
       this.ojosVoladores.push(ojoVolador);
@@ -95,36 +95,69 @@ class MyJuego extends THREE.Object3D {
     /************** OBJETOS ***************/
     this.objetos = [];
 
-    let radio = this.circuito.getRadio();
-    for (let i = 0; i < this.points.length; i += 2) {
+    let positions = [
+      { x: 0, y: 0.43, z: 0 }, // Arriba
+      { x: -0.43, y: 0, z: 0 }, // Izquierda
+      { x: 0, y: -0.43, z: 0 }, // Abajo
+      { x: 0.43, y: 0, z: 0 }  // Derecha
+    ];
+    
+    for (let i = 1; i < this.points.length; i += 1) {
       let t = i / this.points.length;
       let point = this.path.getPointAt(t);
-
+      let tangent = this.path.getTangentAt(t).normalize();
+    
       let objeto;
-      switch (Math.floor(Math.random() * 4)) {
-        case 0:
-          objeto = new MyGasolina();
-          break;
-        case 1:
+      let randomValue = Math.random();
+    
+      if (randomValue < 0.50) { 
+        let goodRandomValue = Math.random();
+        if (goodRandomValue < 0.45) { // 44%
           objeto = new MyEscudo();
-          break;
-        case 2:
+        } else if (goodRandomValue < 0.85) { // 40% 
           objeto = new MyReparar();
-          break;
-        case 3:
+        } else { // 15% 
+          objeto = new MyGasolina();
+        }
+      } else { 
+        let badRandomValue = Math.random();
+        if (badRandomValue < 0.50) { // 50% 
           objeto = new MyOvni();
-          break;
-        case 4:
+        } else {  
           objeto = new MyPinchos();
-          
-          break;
+          objeto.translateZ(-0.35);
+          objeto.translateY(0.15);
+        }
       }
-      objeto.scale.set(0.25, 0.25, 0.25);
-        
-      objeto.position.set(point.x * scale, (point.y + radio) * scale, point.z * scale);
+    
+      objeto.scale.set(0.2, 0.2, 0.2);
+    
+      // Añade un valor a la coordenada y para que el modelo esté por encima del tubo
+      // Usa el módulo de i con 4 para rotar entre las cuatro posiciones cada dos objetos
+      let positionIndex = Math.floor(i / 2) % 4;
+    
+      objeto.position.set(
+        point.x * scale + positions[positionIndex].x,
+        (point.y) * scale + positions[positionIndex].y,
+        point.z * scale
+      );
+    
+      if (positionIndex === 2) {
+        objeto.rotateX(Math.PI);
+      }
+      if (positionIndex === 1) {
+        objeto.rotateZ(Math.PI / 2);
+      }
+      if (positionIndex === 3) {
+        objeto.rotateZ(-Math.PI / 2);
+      }
+    
+      objeto.rotateY(Math.PI/2);
+    
       this.objetos.push(objeto);
       this.add(objeto);
     }
+
 
     // Puntuacion
     this.puntuacion = 0;

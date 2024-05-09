@@ -48,9 +48,9 @@ class MyOvni extends THREE.Object3D {
     this.ovni = new THREE.Group();
     this.ovni.add(mesh);
     this.ovni.add(luzAbajo_M);
-    this.ovni.scale.set(0.5, 0.5, 0.5);
+    this.ovni.scale.set(0.25, 0.25, 0.25);
 
-    this.ovni.translateY(0.4);
+    this.ovni.translateY(0.15);
     this.add(this.ovni);
   }
   

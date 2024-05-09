@@ -97,36 +97,36 @@ class MyPersonaje extends THREE.Object3D {
 
   }
 
-    setupRotationAnimationDerecha() {
-      var radio = 0.47; // Radio del tubo escalado
-      var fin = { angle: this.origen.angle + 2 * (Math.PI / 180) }; // 5 grados en radianes
-      var tiempoDeRecorrido = 5; // 500 ms = 0.5 segundos
+  setupRotationAnimationDerecha() {
+    var radio = 0.47; // Radio del tubo escalado
+    var fin = { angle: this.origen.angle + 2 * (Math.PI / 180) }; // 5 grados en radianes
+    var tiempoDeRecorrido = 5; // 500 ms = 0.5 segundos
 
-      // El centro del círculo es la posición actual del coche menos el radio en la dirección Y
-      var centro = new THREE.Vector3(
-          this.coche.position.x,
-          this.coche.position.y - radio * Math.sin(this.origen.angle),
-          this.coche.position.z - radio * Math.cos(this.origen.angle)
-      );
+    // El centro del círculo es la posición actual del coche menos el radio en la dirección Y
+    var centro = new THREE.Vector3(
+        this.coche.position.x,
+        this.coche.position.y - radio * Math.sin(this.origen.angle),
+        this.coche.position.z - radio * Math.cos(this.origen.angle)
+    );
 
-      // Animación: girar alrededor del radio del tubo
-      this.rotacionAnimacion = new TWEEN.Tween(this.origen).to(fin, tiempoDeRecorrido)
-      .onUpdate(() => {
-          let angle = this.origen.angle;
-          this.currentAngle = angle;
+    // Animación: girar alrededor del radio del tubo
+    this.rotacionAnimacion = new TWEEN.Tween(this.origen).to(fin, tiempoDeRecorrido)
+    .onUpdate(() => {
+        let angle = this.origen.angle;
+        this.currentAngle = angle;
 
-          // Calcular la nueva posición del coche en la superficie del tubo
-          let posicionTubo = new THREE.Vector3(
-              centro.x,
-              centro.y + radio * Math.sin(angle),
-              centro.z + radio * Math.cos(angle)
-          );
+        // Calcular la nueva posición del coche en la superficie del tubo
+        let posicionTubo = new THREE.Vector3(
+            centro.x,
+            centro.y + radio * Math.sin(angle),
+            centro.z + radio * Math.cos(angle)
+        );
 
-          // Actualizar la posición del coche
-          this.coche.position.copy(posicionTubo);
-                  
-      });
-      this.rotacionAnimacion.start();
+        // Actualizar la posición del coche
+        this.coche.position.copy(posicionTubo);
+                
+    });
+    this.rotacionAnimacion.start();
   }
   setupRotationAnimationIzquierda() {
     var radio = 0.47; // Radio del tubo escalado

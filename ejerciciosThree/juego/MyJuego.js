@@ -26,7 +26,6 @@ class MyJuego extends THREE.Object3D {
     this.path = new THREE.CatmullRomCurve3(this.points, true);
     this.t = 0;
 
-
     // Crear ojos voladores
     this.ojosVoladores = [];
     let scale = this.circuito.scale.x;
@@ -176,7 +175,7 @@ class MyJuego extends THREE.Object3D {
 
     
         let position = this.path.getPointAt(this.t);
-            
+
         let tangent = this.path.getTangentAt(this.t).normalize();
     
         this.personaje.position.copy(position.multiplyScalar(3)); 
@@ -198,21 +197,6 @@ class MyJuego extends THREE.Object3D {
   }
 
   update(teclaDerecha, teclaIzquierda) {
-    // this.t = this.t % 1;
-
-    // let position = this.path.getPointAt(this.t);
-
-    // let tangent = this.path.getTangentAt(this.t).normalize();
-
-    // this.personaje.position.copy(position.multiplyScalar(3)); 
-
-    // this.personaje.lookAt(position.clone().add(tangent));
-
-    // this.personaje.translateY(0.5);
-    // this.personaje.rotateY(Math.PI/2);
-
-    // this.t += 0.00025;
-
     // Actualización del juego aquí
     TWEEN.update();
     if (!this.animacion.isPlaying()) {

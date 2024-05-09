@@ -100,7 +100,6 @@ class MyScene extends THREE.Scene {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Movimiento personaje y camara
-    this.isThirdPersonCamera = false;
     window.addEventListener('keydown', (event) => {
       if (event.code === 'Space') {
         this.isThirdPersonCamera = !this.isThirdPersonCamera;
@@ -316,6 +315,7 @@ class MyScene extends THREE.Scene {
     this.model.update(this.teclaDerecha, this.teclaIzquierda);
   
     // Camara /////////////////////////
+    
     this.updateCamera2Position();
     this.renderer.render (this, this.getCamera());
 
@@ -334,7 +334,7 @@ class MyScene extends THREE.Scene {
     let lookAtPosition = this.model.personaje.position.clone();
     lookAtPosition.y = 0.2;
     this.camera2.lookAt(lookAtPosition);
-}
+  }
 
 }
 

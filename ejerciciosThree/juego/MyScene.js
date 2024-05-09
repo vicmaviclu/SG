@@ -32,10 +32,7 @@ class MyScene extends THREE.Scene {
     this.initStats();
     
     // Construimos los distinos elementos que tendremos en la escena
-    
-    // Tendremos una cámara con un control de movimiento con el ratón
     this.createCamera1 ();
-    this.createCamera2 ();
 
     // Todo elemento que se desee sea tenido en cuenta en el renderizado de la escena debe pertenecer a esta. Bien como hijo de la escena (this en esta clase) o como hijo de un elemento que ya esté en la escena.
     // Tras crear cada elemento se añadirá a la escena con   this.add(variable)
@@ -64,7 +61,7 @@ class MyScene extends THREE.Scene {
 
     window.addEventListener('click', (event) => {
       // Solo se puede hacer picking si esta en tercera persona
-      //if (this.isThirdPersonCamera) {
+      if (this.isThirdPersonCamera) {
         // Actualizar las coordenadas del ratón
         this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -96,7 +93,7 @@ class MyScene extends THREE.Scene {
             console.log("Puntuación: ", this.model.puntuacion);
           }
         }
-      //}
+      }
     }, false);
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,11 +165,7 @@ class MyScene extends THREE.Scene {
 
   }
 
-  // Camara 2 en tercera persona
-  createCamera2 () {
-    this.camera2 = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-    this.add (this.camera2);
-  }
+
   
   createGround () {
     // El suelo es un Mesh, necesita una geometría y un material.
@@ -305,7 +298,7 @@ class MyScene extends THREE.Scene {
   getCamera () {
     // En principio se devuelve la única cámara que tenemos
     // Si hubiera varias cámaras, este método decidiría qué cámara devuelve cada vez que es consultado
-    return this.isThirdPersonCamera ? this.camera2 : this.camera1;
+    return this.isThirdPersonCamera ? this.model.personaje.camera2 : this.camera1;
   }
   
   setCameraAspect (ratio) {
@@ -338,10 +331,9 @@ class MyScene extends THREE.Scene {
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Se actualiza el resto del modelo
-    this.model.update(this.teclaDerecha, this.teclaIzquierda, this.isThirdPersonCamera);
+    this.model.update(this.teclaDerecha, this.teclaIzquierda, this.isThirdPersonCamera, this.camera2);
   
     // Camara /////////////////////////
-    this.updateCamera2Position();
     this.renderer.render (this, this.getCamera());
 
     // Interfaz /////////////////////////
@@ -350,47 +342,21 @@ class MyScene extends THREE.Scene {
     this.guiControls.ruedaDerecha = this.model.getCanTurnRight();
     this.guiControls.escudo = this.model.getEscudo();
 
+
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
     // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
     // Si no existiera esta línea,  update()  se ejecutaría solo la primera vez.
     requestAnimationFrame(() => this.update())
   }
 
-  updateCamera2Position() {
-    // Actualizar la posición de la cámara en tercera persona
-    let idealOffset = new THREE.Vector3(-2, 2, 0);
-
-    // Calcular la posición ideal de la cámara en función de la posición del personaje
-    let cameraPosition = new THREE.Vector3().addVectors(this.model.personaje.position, idealOffset);
-
-    // Actualizar la posición de la cámara
-    this.camera2.position.lerp(cameraPosition, 0.1); // El segundo parámetro controla la velocidad de la cámara
-
-    // Hacer que la cámara mire al personaje
-    this.camera2.lookAt(this.model.personaje.position);
-
-
-    // let tangent = this.model.path.getTangentAt(this.model.t).normalize();
-    // let cameraOffset = tangent.clone().multiplyScalar(-0.3); 
-    // cameraOffset.y = 0.55; 
-    // let cameraPosition = new THREE.Vector3().addVectors(this.model.personaje.position, cameraOffset);
-    // this.camera2.position.copy(cameraPosition);
-    // let lookAtPosition = this.model.personaje.position.clone();
-    // lookAtPosition.y = 0.2;
-    // this.camera2.lookAt(lookAtPosition);
-  }
-
 }
 
 /// La función   main
 $(function () {
-  
   // Se instancia la escena pasándole el  div  que se ha creado en el html para visualizar
   var scene = new MyScene("#WebGL-output");
-
   // Se añaden los listener de la aplicación. En este caso, el que va a comprobar cuándo se modifica el tamaño de la ventana de la aplicación.
   window.addEventListener ("resize", () => scene.onWindowResize());
-  
   // Que no se nos olvide, la primera visualización.
   scene.update();
 });

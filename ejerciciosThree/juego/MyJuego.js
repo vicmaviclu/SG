@@ -207,7 +207,9 @@ class MyJuego extends THREE.Object3D {
     this.animacion.start();
   }
 
-  update(teclaDerecha, teclaIzquierda, isThirdPersonCamera) {
+  
+
+  update(teclaDerecha, teclaIzquierda, isThirdPersonCamera, camara) {
 
     // Se actualiza la animacion del recorrido
     // Si se pulsa las teclas de direccion y esta en 3 persona gira

@@ -88,8 +88,14 @@ class MyPersonaje extends THREE.Object3D {
     this.coche.add(this.ruedaTraseraIzquierda);
     this.coche.add(this.ruedaTraseraDerecha);
 
+    // CAMARA EN TERCERA PERSONA
+    this.camera2 = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+    this.camera2.position.set (3, 1, 0.05);
+    this.camera2.lookAt(0, 0.9, 0);
+    this.coche.add (this.camera2);
+
     this.add(this.coche);
-    this.coche.position.set(0, 0.45, 0);
+    this.coche.position.set(0, 0.46, 0);
     this.coche.rotateY(-0.3);
     this.coche.scale.set(0.05, 0.05, 0.05);
 
@@ -97,8 +103,8 @@ class MyPersonaje extends THREE.Object3D {
   }
 
   setupRotationAnimationDerecha() {
-    var radio = 0.47; // Radio del tubo escalado
-    var fin = { angle: this.origen.angle + 2 * (Math.PI / 180) }; // 5 grados en radianes
+    var radio = 0.46; 
+    var fin = { angle: this.origen.angle + 2 * (Math.PI / 180) }; 
     var tiempoDeRecorrido = 5; // 500 ms = 0.5 segundos
 
       var centro = new THREE.Vector3(
@@ -122,12 +128,14 @@ class MyPersonaje extends THREE.Object3D {
 
         // Actualizar la posición del coche
         this.coche.position.copy(posicionTubo);
+        this.coche.rotateX(-2 * Math.PI / 180);
+
                 
     });
     this.rotacionAnimacion.start();
   }
   setupRotationAnimationIzquierda() {
-    var radio = 0.47; // Radio del tubo escalado
+    var radio = 0.46; // Radio del tubo escalado
     var fin = { angle: this.origen.angle - 2 * (Math.PI / 180) }; // 25 grados en radianes
     var tiempoDeRecorrido = 5; // 50 ms
 
@@ -152,6 +160,7 @@ class MyPersonaje extends THREE.Object3D {
 
         // Actualizar la posición del coche
         this.coche.position.copy(posicionTubo);
+        this.coche.rotateX(2 * Math.PI / 180);
                 
     });
     this.rotacionAnimacion.start();
@@ -172,7 +181,7 @@ class MyPersonaje extends THREE.Object3D {
       this.setupRotationAnimationIzquierda();
       teclaIzquierda = false;
     }
-  
+
   }
   
 }

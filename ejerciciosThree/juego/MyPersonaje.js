@@ -94,7 +94,6 @@ class MyPersonaje extends THREE.Object3D {
     this.coche.scale.set(0.05, 0.05, 0.05);
 
     this.origen = { angle: Math.PI / 2 }; // Mover la inicialización del ángulo de origen al constructor
-
   }
 
   setupRotationAnimationDerecha() {
@@ -174,7 +173,9 @@ class MyPersonaje extends THREE.Object3D {
       this.setupRotationAnimationIzquierda();
       teclaIzquierda = false;
     }
+  
   }
+  
 }
 
 export { MyPersonaje };

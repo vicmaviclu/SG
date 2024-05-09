@@ -57,49 +57,50 @@ class MyScene extends THREE.Scene {
     this.add(this.model);
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////77777
+  //////////////////////////////////////////////////////////////////////////////////////////////////77777
   // Picking
-  this.raycaster = new THREE.Raycaster();
-  this.mouse = new THREE.Vector2();
+    this.raycaster = new THREE.Raycaster();
+    this.mouse = new THREE.Vector2();
 
-  window.addEventListener('click', (event) => {
-    // Actualizar las coordenadas del ratón
-    this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-    // Actualizar el rayo del raycaster
-    this.raycaster.setFromCamera(this.mouse, this.getCamera());
-
-    // Obtener los ojos voladores desde MyJuego
-    let ojosVoladores = this.model.getOjosVoladores();
-
-    // Obtener los objetos que intersectan con el rayo
-    let intersects = this.raycaster.intersectObjects(ojosVoladores, true);
-    console.log("Intersects: ", intersects);
-
-    // Si hay alguna intersección
-    if (intersects.length > 0) {
-      // Obtener el primer objeto que intersecta
-      let firstObject = intersects[0].object;
-      // Buscar el objeto MyOjoVolador padre
-      while (firstObject.parent && !(firstObject instanceof MyOjoVolador)) {
-        firstObject = firstObject.parent;
+    window.addEventListener('click', (event) => {
+      // Solo se puede hacer picking si esta en tercera persona
+      if (this.isThirdPersonCamera) {
+        // Actualizar las coordenadas del ratón
+        this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    
+        // Actualizar el rayo del raycaster
+        this.raycaster.setFromCamera(this.mouse, this.getCamera());
+    
+        let ojosVoladores = this.model.getOjosVoladores();
+    
+        // Obtener los objetos que intersectan con el rayo
+        let intersects = this.raycaster.intersectObjects(ojosVoladores, true);
+        console.log("Intersects: ", intersects);
+    
+        // Si hay alguna intersección
+        if (intersects.length > 0) {
+          let firstObject = intersects[0].object;
+          while (firstObject.parent && !(firstObject instanceof MyOjoVolador)) {
+            firstObject = firstObject.parent;
+          }
+          console.log("First object: ", firstObject);
+    
+          // Encontrar el índice del objeto en el array de ojos voladores
+          let index = ojosVoladores.indexOf(firstObject);
+          console.log("Index: ", index);
+    
+          if (index !== -1) {
+            this.model.removeOjoVolador(index);
+          }
+        }
       }
-      console.log("First object: ", firstObject);
+    }, false);
 
-      // Encontrar el índice del objeto en el array de ojos voladores
-      let index = ojosVoladores.indexOf(firstObject);
-      console.log("Index: ", index);
-
-      // Si el objeto está en el array (index != -1), eliminarlo
-      if (index !== -1) {
-        this.model.removeOjoVolador(index);
-      }
-    }
-  }, false);
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Movimiento personaje y camara
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Movimiento personaje y camara
+  // Cambio de camara con el espacio
+    this.isThirdPersonCamera = false;
     window.addEventListener('keydown', (event) => {
       if (event.code === 'Space') {
         this.isThirdPersonCamera = !this.isThirdPersonCamera;
@@ -108,7 +109,8 @@ class MyScene extends THREE.Scene {
 
     this.teclaDerecha = false;
     this.teclaIzquierda = false;
-    
+  
+  // Giro a la izda o derecha
     window.addEventListener('keydown', (event) => {
       if (!this.keyPressed) {
         switch (event.key) {
@@ -151,7 +153,6 @@ class MyScene extends THREE.Scene {
   }
   
   createCamera1 () {
-      // Crear camera1
       this.camera1 = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 50);
       this.camera1.position.set (0, 5, 7);
       var look1 = new THREE.Vector3 (0,1.5,0);
@@ -165,9 +166,9 @@ class MyScene extends THREE.Scene {
 
   }
 
+  // Camara 2 en tercera persona
   createCamera2 () {
-    // En el método de creación de la cámara
-    this.camera2 = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 50);
+    this.camera2 = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
     this.add (this.camera2);
   }
   
@@ -312,7 +313,7 @@ class MyScene extends THREE.Scene {
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Se actualiza el resto del modelo
-    this.model.update(this.teclaDerecha, this.teclaIzquierda);
+    this.model.update(this.teclaDerecha, this.teclaIzquierda, this.isThirdPersonCamera);
   
     // Camara /////////////////////////
     
@@ -326,14 +327,15 @@ class MyScene extends THREE.Scene {
   }
 
   updateCamera2Position() {
-    let tangent = this.model.path.getTangentAt(this.model.t).normalize();
-    let cameraOffset = tangent.clone().multiplyScalar(-0.3); 
-    cameraOffset.y = 0.55; 
-    let cameraPosition = new THREE.Vector3().addVectors(this.model.personaje.position, cameraOffset);
-    this.camera2.position.copy(cameraPosition);
-    let lookAtPosition = this.model.personaje.position.clone();
-    lookAtPosition.y = 0.2;
-    this.camera2.lookAt(lookAtPosition);
+    
+    // let tangent = this.model.path.getTangentAt(this.model.t).normalize();
+    // let cameraOffset = tangent.clone().multiplyScalar(-0.3); 
+    // cameraOffset.y = 0.55; 
+    // let cameraPosition = new THREE.Vector3().addVectors(this.model.personaje.position, cameraOffset);
+    // this.camera2.position.copy(cameraPosition);
+    // let lookAtPosition = this.model.personaje.position.clone();
+    // lookAtPosition.y = 0.2;
+    // this.camera2.lookAt(lookAtPosition);
   }
 
 }

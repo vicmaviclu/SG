@@ -41,56 +41,6 @@ class MyJuego extends THREE.Object3D {
       this.add(ojoVolador);
     }
 
-    /************** PRUEBAS ***************/
-    // let u = 0;
-    // let point = this.path.getPointAt(u);
-    // let tangent = this.path.getTangentAt(u);
-    // // Vector arbitrario para la rotación
-    // let arbitraryVector = new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-
-    // let normal = new THREE.Vector3().crossVectors(tangent, arbitraryVector).normalize();
-    // let tubeRadius = this.circuito.getRadio() * 3;
-    // normal.multiplyScalar(tubeRadius);
-    // let pointOnSurface = new THREE.Vector3().addVectors(point, normal);
-
-    // // Punto Helper ////////////////
-    // let geometry = new THREE.SphereGeometry(0.01, 32, 32);
-    // let material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-    // let puntoHelper = new THREE.Mesh(geometry, material);
-    // puntoHelper.position.set(pointOnSurface.x, pointOnSurface.y, pointOnSurface.z);
-
-    // this.add(puntoHelper);
-
-    // // Objeto //////////////
-    // let obj = new MyEscudo();
-    // obj.scale.set(0.25, 0.25, 0.25);
-    // obj.position.set(pointOnSurface.x, pointOnSurface.y, pointOnSurface.z);
-
-    // let tangentPoint = new THREE.Vector3().addVectors(pointOnSurface, tangent);
-    // obj.lookAt(tangentPoint);
-
-    // let yAxis = obj.up;
-    // let dotProduct = yAxis.dot(normal);
-    // let angle = Math.acos(dotProduct);
-    // if (pointOnSurface.x > 0) {
-    //   angle = -angle;
-    // }
-    // obj.rotateOnWorldAxis(tangent, angle);
-
-    // this.add(obj);
-
-    // // Vectores Helper ////////////////
-    // let tangentHelper = new THREE.ArrowHelper(tangent, pointOnSurface, 1, 0xff0000);
-    // let normalHelper = new THREE.ArrowHelper(normal, pointOnSurface, 1, 0x00ff00);
-
-    // let objYAxis = new THREE.Vector3().copy(obj.up);
-    // let objYAxisHelper = new THREE.ArrowHelper(objYAxis, pointOnSurface, 1, 0x0000ff);
-
-    // this.add(objYAxisHelper);
-    // this.add(tangentHelper);
-    // this.add(normalHelper);
-
-
     /************** OBJETOS ***************/
     this.objetos = [];
 
@@ -196,15 +146,19 @@ class MyJuego extends THREE.Object3D {
     this.animacion.start();
   }
 
-  update(teclaDerecha, teclaIzquierda) {
-    // Actualización del juego aquí
+  update(teclaDerecha, teclaIzquierda, isThirdPersonCamera) {
+
+    // Se actualiza la animacion del recorrido
+    // Si se pulsa las teclas de direccion y esta en 3 persona gira
     TWEEN.update();
     if (!this.animacion.isPlaying()) {
         this.setupAnimation();
     }
-    this.personaje.update(teclaDerecha, teclaIzquierda);
+    if(isThirdPersonCamera){
+      this.personaje.update(teclaDerecha, teclaIzquierda);
+    }
 
-    // Movimiento de los ojos
+    // Movimiento de los ojos ////////////////////////////
     for (let i = 0; i < this.ojosVoladores.length; i++) {
       let ojoVolador = this.ojosVoladores[i];
       ojoVolador.update();
@@ -212,7 +166,6 @@ class MyJuego extends THREE.Object3D {
       if (i % 2 === 0) {
         ojoVolador.position.y += Math.sin(Date.now() * 0.005) * 0.025;
     }
-    // Si el índice es impar, mover en el eje Z
     else {
         ojoVolador.position.z += Math.sin(Date.now() * 0.005) * 0.025;
     }
@@ -222,7 +175,7 @@ class MyJuego extends THREE.Object3D {
       objeto.update();
     }
 
-    // Colisiones
+    // Colisiones /////////////////////////////////////
     this.personajeBox.setFromObject(this.personaje);
 
     for (let i = 0; i < this.objetos.length; i++) {

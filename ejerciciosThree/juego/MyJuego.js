@@ -197,30 +197,19 @@ class MyJuego extends THREE.Object3D {
     this.animacion.start();
   }
 
-  update(teclaDerecha, teclaIzquierda) {
-    // this.t = this.t % 1;
+  update(teclaDerecha, teclaIzquierda, isThirdPersonCamera) {
 
-    // let position = this.path.getPointAt(this.t);
-
-    // let tangent = this.path.getTangentAt(this.t).normalize();
-
-    // this.personaje.position.copy(position.multiplyScalar(3)); 
-
-    // this.personaje.lookAt(position.clone().add(tangent));
-
-    // this.personaje.translateY(0.5);
-    // this.personaje.rotateY(Math.PI/2);
-
-    // this.t += 0.00025;
-
-    // Actualización del juego aquí
+    // Se actualiza la animacion del recorrido
+    // Si se pulsa las teclas de direccion y esta en 3 persona gira
     TWEEN.update();
     if (!this.animacion.isPlaying()) {
         this.setupAnimation();
     }
-    this.personaje.update(teclaDerecha, teclaIzquierda);
+    if(isThirdPersonCamera){
+      this.personaje.update(teclaDerecha, teclaIzquierda);
+    }
 
-    // Movimiento de los ojos
+    // Movimiento de los ojos ////////////////////////////
     for (let i = 0; i < this.ojosVoladores.length; i++) {
       let ojoVolador = this.ojosVoladores[i];
       ojoVolador.update();
@@ -228,7 +217,6 @@ class MyJuego extends THREE.Object3D {
       if (i % 2 === 0) {
         ojoVolador.position.y += Math.sin(Date.now() * 0.005) * 0.025;
     }
-    // Si el índice es impar, mover en el eje Z
     else {
         ojoVolador.position.z += Math.sin(Date.now() * 0.005) * 0.025;
     }
@@ -238,7 +226,7 @@ class MyJuego extends THREE.Object3D {
       objeto.update();
     }
 
-    // Colisiones
+    // Colisiones /////////////////////////////////////
     this.personajeBox.setFromObject(this.personaje);
 
     for (let i = 0; i < this.objetos.length; i++) {

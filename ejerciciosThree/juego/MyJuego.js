@@ -33,13 +33,13 @@ class MyJuego extends THREE.Object3D {
     this.puntuacion = 0;
 
     // Control personaje puede girar
-    this.canTurnLeft = true;
-    this.canTurnRight = true;
+    this.giroIzquierda = true;
+    this.giroDerecha = true;
 
     // Escudo
     this.escudo = false;
 
-    /************** OJOS VOLADORES ***************/
+/************** OJOS VOLADORES ***************/
     // Crear ojos voladores
     this.ojosVoladores = [];
     let scale = this.circuito.scale.x;
@@ -55,7 +55,7 @@ class MyJuego extends THREE.Object3D {
       this.add(ojoVolador);
     }
 
-    /************** OBJETOS ***************/
+/************** OBJETOS ***************/
     this.objetos = [];
 
     let positions = [
@@ -121,14 +121,14 @@ class MyJuego extends THREE.Object3D {
       this.add(objeto);
     }
 
-    /***************** COLISIONES **********************/
+/***************** COLISIONES **********************/
     this.personajeBox = new THREE.Box3().setFromObject(this.personaje);
     for (let i = 0; i < this.objetos.length; i++) {
       let objeto = this.objetos[i];
       objeto.userData.box = new THREE.Box3().setFromObject(objeto);
     }
 
-    /****************** ANIMACION *********************/
+/****************** ANIMACION *********************/
     // Inicializar this.origen antes de llamar a this.setupAnimation();
     this.origen = { t: 0 };
     this.velocidad = 0.005;
@@ -141,17 +141,17 @@ class MyJuego extends THREE.Object3D {
     // GUI code here
   }
   
-  /****************** GETTERS *********************************/
+/****************** GETTERS *********************************/
   getPuntuacion() {
     return this.puntuacion;
   }
 
-  getCanTurnLeft() {
-    return this.canTurnLeft;
+  getGiroIzquierda() {
+    return this.giroIzquierda;
   }
   
-  getCanTurnRight() {
-    return this.canTurnRight;
+  getGiroDerecha() {
+    return this.giroDerecha;
   }
 
   getEscudo() {
@@ -162,7 +162,11 @@ class MyJuego extends THREE.Object3D {
     return this.ojosVoladores;
   }
 
-  /****************** SETTERS *********************/
+  getVelocidad() {
+    return this.velocidad;
+  }
+
+/****************** SETTERS *********************/
   setPuntuacion(puntos) {
     if(this.puntuacion + puntos < 0){
       this.puntuacion = 0;
@@ -181,7 +185,7 @@ class MyJuego extends THREE.Object3D {
     }, 5000);
   }
 
-  /******************* ANIMACION ***********************/
+/******************* ANIMACION ***********************/
   setupAnimation() {
     this.segmentos = 500;
     this.frenetFrames = this.path.computeFrenetFrames(this.segmentos, true);
@@ -210,7 +214,7 @@ class MyJuego extends THREE.Object3D {
     .onComplete(() => {
       if (this.origen.t > 0.999) {
           this.origen.t = 0;
-          this.velocidad *= 1.1; // Aumentar la velocidad un 10%
+          this.velocidad *= 1.10; // Aumentar la velocidad un 10%
       } else {
           this.origen.t += 0.0001; 
       }
@@ -218,8 +222,8 @@ class MyJuego extends THREE.Object3D {
     this.animacion.start();
   }
 
-  /******************** UPDATE **********************/
-  update(teclaDerecha, teclaIzquierda, isThirdPersonCamera, camara) {
+/******************** UPDATE **********************/
+  update(teclaDerecha, teclaIzquierda, isThirdPersonCamera) {
     // Animacion /////////////////////////////
     // Se actualiza la animacion del recorrido
     // Si se pulsa las teclas de direccion y esta en 3 persona gira
@@ -228,11 +232,11 @@ class MyJuego extends THREE.Object3D {
         this.setupAnimation();
     }
     if(isThirdPersonCamera){
-      this.personaje.update(teclaDerecha && this.canTurnRight, teclaIzquierda && this.canTurnLeft);
+      this.personaje.update(teclaDerecha && this.giroDerecha, teclaIzquierda && this.giroIzquierda);
     }
     console.log("Velocidad: " + this.velocidad);
 
-    // Movimiento de los ojos ////////////////////////////
+/////// Movimiento de los ojos ////////////////////////////
     for (let i = 0; i < this.ojosVoladores.length; i++) {
       let ojoVolador = this.ojosVoladores[i];
       ojoVolador.update();
@@ -249,7 +253,7 @@ class MyJuego extends THREE.Object3D {
       objeto.update();
     }
 
-    // Colisiones /////////////////////////////////////
+////// Colisiones /////////////////////////////////////
     this.personajeBox.setFromObject(this.personaje);
 
     for (let i = 0; i < this.objetos.length; i++) {
@@ -258,28 +262,28 @@ class MyJuego extends THREE.Object3D {
 
         if(objeto instanceof MyGasolina){
           this.setPuntuacion(5);
-          this.velocidad *= 0.95;
+          this.velocidad *= 0.90;
         } else if(objeto instanceof MyOvni){
           if(this.escudo){
             this.escudo = false;
           } else {
             this.setPuntuacion(-5);
-            this.velocidad *= 1.05;
+            this.velocidad *= 1.20;
           }
         } else if (objeto instanceof MyPinchos){
           if (this.escudo) {
             this.escudo = false;
-          } else if(this.canTurnLeft && this.canTurnRight){
+          } else if(this.giroDerecha && this.giroIzquierda){
               if(Math.random() < 0.5){
-                this.canTurnLeft = false;
+                this.giroIzquierda = false;
               } else {
-                this.canTurnRight = false;
+                this.giroDerecha = false;
               }
           }
         } else if (objeto instanceof MyReparar){
-          if(!this.canTurnLeft || !this.canTurnRight){
-            this.canTurnLeft = true;
-            this.canTurnRight = true;
+          if(!this.giroIzquierda || !this.giroDerecha){
+            this.giroIzquierda = true;
+            this.giroDerecha = true;
           }
         } else if (objeto instanceof MyEscudo){
           if (this.escudo === false) {
@@ -295,7 +299,7 @@ class MyJuego extends THREE.Object3D {
         setTimeout(() => {
           objeto.visible = true;
           this.objetos.push(objeto);
-        }, 5000);
+        }, 50000);
       }
     }
   }

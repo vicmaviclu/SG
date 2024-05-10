@@ -99,13 +99,13 @@ class MyPersonaje extends THREE.Object3D {
     this.coche.rotateY(-0.3);
     this.coche.scale.set(0.05, 0.05, 0.05);
 
-    this.origen = { angle: Math.PI / 2 }; // Mover la inicialización del ángulo de origen al constructor
+    this.origen = { angle: Math.PI / 2 }; 
   }
 
   setupRotationAnimationDerecha() {
     var radio = 0.46; 
     var fin = { angle: this.origen.angle + 2 * (Math.PI / 180) }; 
-    var tiempoDeRecorrido = 5; // 500 ms = 0.5 segundos
+    var tiempoDeRecorrido = 5; 
 
       var centro = new THREE.Vector3(
           this.coche.position.x,
@@ -113,13 +113,11 @@ class MyPersonaje extends THREE.Object3D {
           this.coche.position.z - radio * Math.cos(this.origen.angle)
       );
 
-    // Animación: girar alrededor del radio del tubo
     this.rotacionAnimacion = new TWEEN.Tween(this.origen).to(fin, tiempoDeRecorrido)
     .onUpdate(() => {
         let angle = this.origen.angle;
         this.currentAngle = angle;
 
-        // Calcular la nueva posición del coche en la superficie del tubo
         let posicionTubo = new THREE.Vector3(
             centro.x,
             centro.y + radio * Math.sin(angle),
@@ -135,23 +133,20 @@ class MyPersonaje extends THREE.Object3D {
     this.rotacionAnimacion.start();
   }
   setupRotationAnimationIzquierda() {
-    var radio = 0.46; // Radio del tubo escalado
-    var fin = { angle: this.origen.angle - 2 * (Math.PI / 180) }; // 25 grados en radianes
-    var tiempoDeRecorrido = 5; // 50 ms
+    var radio = 0.46; 
+    var fin = { angle: this.origen.angle - 2 * (Math.PI / 180) }; 
+    var tiempoDeRecorrido = 5; 
 
-    // El centro del círculo es la posición actual del coche menos el radio en la dirección Y
     var centro = new THREE.Vector3(
         this.coche.position.x,
         this.coche.position.y - radio * Math.sin(this.origen.angle),
         this.coche.position.z - radio * Math.cos(this.origen.angle)
     );
 
-    // Animación: girar alrededor del radio del tubo
     this.rotacionAnimacion = new TWEEN.Tween(this.origen).to(fin, tiempoDeRecorrido)
     .onUpdate(() => {
         let angle = this.origen.angle;
 
-        // Calcular la nueva posición del coche en la superficie del tubo
         let posicionTubo = new THREE.Vector3(
             centro.x,
             centro.y + radio * Math.sin(angle),
@@ -165,6 +160,7 @@ class MyPersonaje extends THREE.Object3D {
     });
     this.rotacionAnimacion.start();
   }
+  
   update (teclaDerecha, teclaIzquierda) {
     // Hacer que las ruedas giren
     this.ruedaDelanteraIzquierda.rotateZ(0.5);

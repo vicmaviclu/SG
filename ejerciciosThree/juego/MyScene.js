@@ -54,8 +54,8 @@ class MyScene extends THREE.Scene {
     this.add(this.model);
 
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////77777
-  // Picking
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Picking ///////////////////////////////////////////
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
 
@@ -96,9 +96,9 @@ class MyScene extends THREE.Scene {
       }
     }, false);
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // Movimiento personaje y camara
-  // Cambio de camara con el espacio
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Movimiento personaje y camara /////////////////////////////////////////
+// Cambio de camara con el espacio //////////////////////////////////////
     this.isThirdPersonCamera = false;
     window.addEventListener('keydown', (event) => {
       if (event.code === 'Space') {
@@ -201,6 +201,7 @@ class MyScene extends THREE.Scene {
       ambientIntensity : 0.5,   
       axisOnOff : true,
       puntuacion: 0,
+      velocidad: 100,
       ruedaIzquierda: true,
       ruedaDerecha: true,
       escudo: false
@@ -228,6 +229,10 @@ class MyScene extends THREE.Scene {
     gui.add(this.guiControls, 'puntuacion')
       .name('Puntuación: ')
       .listen();
+    
+    gui.add(this.guiControls, 'velocidad')
+       .name('Velocidad: ')
+       .listen();
     
     // Ruedas
     gui.add(this.guiControls, 'ruedaIzquierda')
@@ -338,8 +343,9 @@ class MyScene extends THREE.Scene {
 
     // Interfaz /////////////////////////
     this.guiControls.puntuacion = this.model.getPuntuacion();
-    this.guiControls.ruedaIzquierda = this.model.getCanTurnLeft();
-    this.guiControls.ruedaDerecha = this.model.getCanTurnRight();
+    this.guiControls.velocidad = this.model.getVelocidad() / 0.005 * 100;
+    this.guiControls.ruedaIzquierda = this.model.getGiroIzquierda();
+    this.guiControls.ruedaDerecha = this.model.getGiroDerecha();
     this.guiControls.escudo = this.model.getEscudo();
 
 

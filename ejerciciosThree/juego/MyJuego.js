@@ -258,13 +258,13 @@ class MyJuego extends THREE.Object3D {
 
         if(objeto instanceof MyGasolina){
           this.setPuntuacion(5);
-          this.velocidad -= 0.001;
+          this.velocidad *= 0.95;
         } else if(objeto instanceof MyOvni){
           if(this.escudo){
             this.escudo = false;
           } else {
             this.setPuntuacion(-5);
-            this.velocidad += 0.001;
+            this.velocidad *= 1.05;
           }
         } else if (objeto instanceof MyPinchos){
           if (this.escudo) {

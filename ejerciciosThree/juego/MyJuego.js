@@ -15,17 +15,31 @@ class MyJuego extends THREE.Object3D {
     super();
     this.createGUI(gui, titleGui);
 
+    // Circuito
     this.circuito = new MyCircuito(gui, titleGui); 
     this.circuito.scale.set(3,3,3);
     this.add(this.circuito);
 
+    // Personaje
     this.personaje = new MyPersonaje(gui, titleGui);
     this.add(this.personaje);
 
+    // Puntos del circuito
     this.points = this.circuito.getPoints();
     this.path = new THREE.CatmullRomCurve3(this.points, true);
     this.t = 0;
 
+    // Puntuacion
+    this.puntuacion = 0;
+
+    // Control personaje puede girar
+    this.canTurnLeft = true;
+    this.canTurnRight = true;
+
+    // Escudo
+    this.escudo = false;
+
+    /************** OJOS VOLADORES ***************/
     // Crear ojos voladores
     this.ojosVoladores = [];
     let scale = this.circuito.scale.x;
@@ -107,17 +121,6 @@ class MyJuego extends THREE.Object3D {
       this.add(objeto);
     }
 
-
-    // Puntuacion
-    this.puntuacion = 0;
-
-    // Control personaje puede girar
-    this.canTurnLeft = true;
-    this.canTurnRight = true;
-
-    // Escudo
-    this.escudo = false;
-
     /***************** COLISIONES **********************/
     this.personajeBox = new THREE.Box3().setFromObject(this.personaje);
     for (let i = 0; i < this.objetos.length; i++) {
@@ -137,7 +140,8 @@ class MyJuego extends THREE.Object3D {
   createGUI(gui, titleGui) {
     // GUI code here
   }
-
+  
+  /****************** GETTERS *********************************/
   getPuntuacion() {
     return this.puntuacion;
   }
@@ -158,6 +162,15 @@ class MyJuego extends THREE.Object3D {
     return this.ojosVoladores;
   }
 
+  /****************** SETTERS *********************/
+  setPuntuacion(puntos) {
+    if(this.puntuacion + puntos < 0){
+      this.puntuacion = 0;
+    } else {
+      this.puntuacion += puntos;
+    }
+  }
+
   removeOjoVolador(index) {
     let ojoVolador = this.ojosVoladores[index];
     ojoVolador.visible = false;
@@ -168,6 +181,7 @@ class MyJuego extends THREE.Object3D {
     }, 5000);
   }
 
+  /******************* ANIMACION ***********************/
   setupAnimation() {
     this.segmentos = 500;
     this.frenetFrames = this.path.computeFrenetFrames(this.segmentos, true);
@@ -196,6 +210,7 @@ class MyJuego extends THREE.Object3D {
     .onComplete(() => {
       if (this.origen.t > 0.999) {
           this.origen.t = 0;
+          this.velocidad *= 1.1; // Aumentar la velocidad un 10%
       } else {
           this.origen.t += 0.0001; 
       }
@@ -203,10 +218,9 @@ class MyJuego extends THREE.Object3D {
     this.animacion.start();
   }
 
-  
-
+  /******************** UPDATE **********************/
   update(teclaDerecha, teclaIzquierda, isThirdPersonCamera, camara) {
-
+    // Animacion /////////////////////////////
     // Se actualiza la animacion del recorrido
     // Si se pulsa las teclas de direccion y esta en 3 persona gira
     TWEEN.update();
@@ -216,6 +230,7 @@ class MyJuego extends THREE.Object3D {
     if(isThirdPersonCamera){
       this.personaje.update(teclaDerecha && this.canTurnRight, teclaIzquierda && this.canTurnLeft);
     }
+    console.log("Velocidad: " + this.velocidad);
 
     // Movimiento de los ojos ////////////////////////////
     for (let i = 0; i < this.ojosVoladores.length; i++) {
@@ -282,13 +297,6 @@ class MyJuego extends THREE.Object3D {
           this.objetos.push(objeto);
         }, 5000);
       }
-    }
-  }
-  setPuntuacion(puntos) {
-    if(this.puntuacion + puntos < 0){
-      this.puntuacion = 0;
-    } else {
-      this.puntuacion += puntos;
     }
   }
 

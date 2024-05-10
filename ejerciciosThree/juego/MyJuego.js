@@ -120,13 +120,9 @@ class MyJuego extends THREE.Object3D {
 
     /***************** COLISIONES **********************/
     this.personajeBox = new THREE.Box3().setFromObject(this.personaje);
-    var personajeBoxHelper = new THREE.Box3Helper(this.personajeBox, 0xffff00);
-    this.add(personajeBoxHelper);
     for (let i = 0; i < this.objetos.length; i++) {
       let objeto = this.objetos[i];
       objeto.userData.box = new THREE.Box3().setFromObject(objeto);
-      var boxHelper = new THREE.Box3Helper(objeto.userData.box, 0xffff00);
-      this.add(boxHelper);
     }
 
     /****************** ANIMACION *********************/
@@ -244,29 +240,20 @@ class MyJuego extends THREE.Object3D {
     for (let i = 0; i < this.objetos.length; i++) {
       let objeto = this.objetos[i];
       if (this.personajeBox.intersectsBox(objeto.userData.box)) {
-        console.log("Colisión");
 
         if(objeto instanceof MyGasolina){
           this.setPuntuacion(5);
           this.velocidad -= 0.001;
-          console.log("Velocidad: " + this.velocidad);
-          console.log("Colision Gasolina");
-          console.log("puntuacion: " + this.puntuacion);
         } else if(objeto instanceof MyOvni){
           if(this.escudo){
             this.escudo = false;
-            console.log("Escudo desactivado");
           } else {
             this.setPuntuacion(-5);
             this.velocidad += 0.001;
-            console.log("Velocidad: " + this.velocidad);
-            console.log("Colision Ovni");
-            console.log("puntuacion: " + this.puntuacion);
           }
         } else if (objeto instanceof MyPinchos){
           if (this.escudo) {
             this.escudo = false;
-            console.log("Escudo desactivado");
           } else if(this.canTurnLeft && this.canTurnRight){
               if(Math.random() < 0.5){
                 this.canTurnLeft = false;
@@ -282,7 +269,6 @@ class MyJuego extends THREE.Object3D {
         } else if (objeto instanceof MyEscudo){
           if (this.escudo === false) {
             this.escudo = true;
-            console.log("Escudo activado");
           }
         }
 

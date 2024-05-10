@@ -153,8 +153,8 @@ class MyScene extends THREE.Scene {
   
   createCamera1 () {
       this.camera1 = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 50);
-      this.camera1.position.set (0, 5, 7);
-      var look1 = new THREE.Vector3 (0,1.5,0);
+      this.camera1.position.set (0, 4, 20);
+      var look1 = new THREE.Vector3 (2,0, -2);
       this.camera1.lookAt(look1);
       this.add (this.camera1);
       this.cameraControl1 = new TrackballControls (this.camera1, this.renderer.domElement);

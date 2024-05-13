@@ -28,6 +28,7 @@ class MyScene extends THREE.Scene {
         // Creamos el modelo
         this.model = new MyPersonaje();
         this.add(this.model);
+        this.model.scale.set(2.5, 2.5, 2.5);
     }
 
     initStats() {
@@ -120,9 +121,9 @@ class MyScene extends THREE.Scene {
         this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 50);
         // Recuerda: Todas las unidades están en metros
         // También se indica dónde se coloca
-        this.camera.position.set (4, 2, 4);
+        this.camera.position.set (1, 2, 1);
         // Y hacia dónde mira
-        var look = new THREE.Vector3 (0,0,0);
+        var look = new THREE.Vector3 (0,1.5,0);
         this.camera.lookAt(look);
         this.add (this.camera);
         
@@ -188,7 +189,7 @@ class MyScene extends THREE.Scene {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         // Se actualiza el resto del modelo
-        // this.model.update();
+        this.model.update();
         
         // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
         this.renderer.render (this, this.getCamera());

@@ -6,8 +6,12 @@ class MyReparar extends THREE.Object3D {
   constructor() {
     super();
     /* MATERIAL */
-    var materialMadera = new THREE.MeshStandardMaterial({ color: 0x8B4513 }); 
-    var materialMetal = new THREE.MeshStandardMaterial({ color: 0x808080 }); 
+    var loader = new THREE.TextureLoader();
+    var maderaTextura = loader.load('../../texturas/madera.jpg');
+    var metalTextura = loader.load('../../texturas/metal.jpg');
+
+    var materialMadera = new THREE.MeshStandardMaterial({ map: maderaTextura}); 
+    var materialMetal = new THREE.MeshStandardMaterial({ map: metalTextura}); 
     materialMetal.metalness = 0.7; 
     materialMetal.roughness = 0.5; 
     

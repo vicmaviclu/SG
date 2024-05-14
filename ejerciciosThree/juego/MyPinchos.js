@@ -6,10 +6,10 @@ class MyPinchos extends THREE.Object3D {
   constructor(gui,titleGui) {
     super();
     /* MATERIAL */
-    var material = new THREE.MeshStandardMaterial({ color: 0x808080 }); // Color gris
+    var loader = new THREE.TextureLoader();
+    var metalTextura = loader.load('../../texturas/metal.jpg');
+    var material = new THREE.MeshStandardMaterial({ map: metalTextura }); // Color gris
     material.metalness = 0.7;
-    material.flatShading = true;
-    material.needsUpdate = true;
 
     /* GEOMETRY */
     var radio = 0.2; 

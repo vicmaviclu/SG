@@ -6,9 +6,7 @@ class MyGasolina extends THREE.Object3D {
   constructor() {
     super();
     /* MATERIAL */
-    var material = new THREE.MeshNormalMaterial();
-    material.flatShading = true;
-    material.needsUpdate = true;
+    var material = new THREE.MeshStandardMaterial({color: 0xff0000}); // Rojo
 
     /* CARGAR OBJETO */
     var objLoader = new OBJLoader();

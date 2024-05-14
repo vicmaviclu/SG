@@ -5,6 +5,12 @@ class MyCircuito extends THREE.Object3D {
     super();
     this.createGUI(gui, titleGui);
 
+    /* MATERIAL */
+    const material = new THREE.MeshStandardMaterial({
+      color: 0xCCCCCC, 
+      roughness: 0.3, 
+      metalness: 0.5, 
+    });
     
     this.points = [
         new THREE.Vector3(0, 0, 0),
@@ -38,15 +44,12 @@ class MyCircuito extends THREE.Object3D {
 
     const path = new THREE.CatmullRomCurve3(this.points, true);
 
+    /* GEOMETRIA */
     this.radio = 0.15;
     const geometry = new THREE.TubeGeometry(path, 1000, this.radio, 16, true);
 
-    const material = new THREE.MeshStandardMaterial({
-      color: 0xCCCCCC, 
-      roughness: 0.3, 
-      metalness: 0.5, 
-    });
-
+    
+    /* MESH */
     const mesh = new THREE.Mesh(geometry, material);
     this.add(mesh);
   }

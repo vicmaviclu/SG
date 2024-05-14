@@ -5,13 +5,16 @@ class MyOvni extends THREE.Object3D {
     super();
 
     // Materiales
+    var loader = new THREE.TextureLoader();
+    var textura = loader.load('../../texturas/aluminio.jpg');
     const material = new THREE.MeshStandardMaterial({
-      color: 0x808080, 
+      color: 0xC0C0C0, 
+      map: textura,
       metalness: 0.5, 
       roughness: 0.25, 
     });
 
-    const lightMaterial = new THREE.MeshBasicMaterial({color: 0xFFFF00});
+    const lightMaterial = new THREE.MeshBasicMaterial({color: 0x00FF00});
 
     // Geometría OVNI
     const shape = new THREE.Shape();

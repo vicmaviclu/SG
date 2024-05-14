@@ -6,8 +6,17 @@ class MyEscudo extends THREE.Object3D {
   constructor() {
     super();
     /* MATERIAL */
-    var material = new THREE.MeshStandardMaterial();
-    material.color.set(0x666666);
+    var loader = new THREE.TextureLoader();
+    var textura = loader.load('../../texturas/grietas.jpg');
+    textura.wrapS = THREE.RepeatWrapping;
+    textura.wrapT = THREE.RepeatWrapping;
+    textura.repeat.set(1,1);
+    var material = new THREE.MeshStandardMaterial({
+      color: 0x666666,
+      map: textura,
+      bumpMap: textura,
+      bumpScale: 1
+    });
 
     /* SHAPES */
     // Shape de la base 

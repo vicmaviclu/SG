@@ -79,29 +79,25 @@ class MyPersonaje extends THREE.Object3D {
     this.ruedaTraseraDerecha.translateZ(0.5);
 
     // Aleron
-    // Crear geometrías
     var geometriaCilindro = new THREE.CylinderGeometry(0.1, 0.1, 0.5, 32);
     var geometriaCaja = new THREE.BoxGeometry(1, 0.4, 0.25);
-    var geometriaPlancha = new THREE.PlaneGeometry(1, 0.4);
+    var geometriaPlancha = new THREE.PlaneGeometry(1, 0.26);
     var geometriaCaja2 = new THREE.BoxGeometry(0.8, 0.3, 0.3);
 
-    // Crear material
-    const materialPlancha = new THREE.MeshBasicMaterial({color: 0xffff00, side: THREE.DoubleSide});
-    // Crear mallas
+    const materialPlancha = new THREE.MeshBasicMaterial({color: 0xFF0000, side: THREE.DoubleSide});
+
     var cilindro = new THREE.Mesh(geometriaCilindro, materialRueda);
     var caja = new THREE.Mesh(geometriaCaja, materialRueda);
     var caja2 = new THREE.Mesh(geometriaCaja2, materialRueda);
     this.plancha1 = new THREE.Mesh(geometriaPlancha, materialPlancha);
 
-    // Posicionar mallas
-    cilindro.position.set(0, 0.5, 0); // Posicionar el cilindro en el centro
-    caja.position.set(0, 0.9, 0); // Posicionar la caja encima del cilindro
-    caja2.position.copy(caja.position); // Posicionar la caja2 en la misma posición que la caja
-    this.plancha1.position.set(0, 0.9, 0); // Posicionar la plancha1 a la izquierda de la caja
+    cilindro.position.set(0, 0.5, 0); 
+    caja.position.set(0, 0.9, 0); 
+    caja2.position.copy(caja.position); 
+    this.plancha1.position.set(0, 0.9, 0); 
 
     this.plancha1.rotateY(Math.PI / 2);
-    // plancha1.rotateX(Math.PI / 2);
-    // Convertir las mallas a CSG
+
     var csg = new CSG();
     csg.union([cilindro, caja]);
     csg.subtract([caja2]);
@@ -109,13 +105,13 @@ class MyPersonaje extends THREE.Object3D {
     var pieza = csg.toMesh();
     pieza.rotateY(Math.PI / 2);
 
-    // Crear grupo
     this.aleron = new THREE.Group();
     this.aleron.add(cilindro);
     this.aleron.add(pieza);
     this.aleron.add(this.plancha1);
-    this.aleron.position.set(1, -0.2, 0); // Posicionar el aleron en la parte trasera del coche
-    this.aleron.scale.set(0.75, 0.75, 0.75); // Escalar el aleron
+    this.aleron.position.set(1, -0.2, 0); 
+    this.aleron.scale.set(0.75, 0.75, 0.75); 
+
     /* THIS */
     this.coche = new THREE.Group();
     this.coche.add(base);
@@ -222,7 +218,7 @@ class MyPersonaje extends THREE.Object3D {
 
     // Mover aleron y plancha1 suavemente
     this.aleron.rotation.y = Math.sin(time) * 0.5;
-    this.plancha1.rotateX(Math.sin(time) * 0.01);
+    this.plancha1.rotateX(Math.sin(time) * 0.015);
   }
   
 }

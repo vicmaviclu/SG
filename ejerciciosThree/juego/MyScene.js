@@ -42,17 +42,22 @@ class MyScene extends THREE.Scene {
     // Un suelo 
     this.createGround ();
     
-    // Y unos ejes. Imprescindibles para orientarnos sobre dónde están las cosas
-    // Todas las unidades están en metros
-    this.axis = new THREE.AxesHelper (1.5);
-    this.add (this.axis);
-    
+
     
     /*** IMPORTACIONES DE MODELOS  ***/
     
     this.model = new MyJuego();
     this.add(this.model);
 
+var geometry = new THREE.SphereGeometry(1, 32, 32);
+
+var material = new THREE.MeshBasicMaterial({color: 0xFF4500, emissive: 0xFF4500});
+
+var sun = new THREE.Mesh(geometry, material);
+
+sun.position.copy(this.sunsetLight.position);
+
+this.add(sun);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Picking ///////////////////////////////////////////
@@ -256,9 +261,8 @@ class MyScene extends THREE.Scene {
     // La luz ambiental solo tiene un color y una intensidad
     // Se declara como   var   y va a ser una variable local a este método
     //    se hace así puesto que no va a ser accedida desde otros métodos
-    this.ambientLight = new THREE.AmbientLight('white', this.guiControls.ambientIntensity);
-    // La añadimos a la escena
-    this.add (this.ambientLight);
+    this.ambientLight = new THREE.AmbientLight(0xCCCCCC, this.guiControls.ambientIntensity); // Cambiado 'white' a 0xCCCCCC para un gris claro
+    this.add(this.ambientLight);
     
     // Se crea una luz focal que va a ser la luz principal de la escena
     // La luz focal, además tiene una posición, y un punto de mira
@@ -268,6 +272,10 @@ class MyScene extends THREE.Scene {
     this.pointLight.power = this.guiControls.lightPower;
     this.pointLight.position.set( 2, 3, 1 );
     this.add (this.pointLight);
+
+    this.sunsetLight = new THREE.DirectionalLight(0xFF4500, 1); // Añade una intensidad a la luz
+    this.sunsetLight.position.set(2, -6, 0);
+    this.add(this.sunsetLight); // Asegúrate de añadir la luz a la escena
   }
   
   setLightPower (valor) {
@@ -282,14 +290,14 @@ class MyScene extends THREE.Scene {
     this.axis.visible = valor;
   }
   
-  createRenderer (myCanvas) {
+  createRenderer(myCanvas) {
     // Se recibe el lienzo sobre el que se van a hacer los renderizados. Un div definido en el html.
     
-    // Se instancia un Renderer   WebGL
+    // Se instancia un Renderer WebGL
     var renderer = new THREE.WebGLRenderer();
     
     // Se establece un color de fondo en las imágenes que genera el render
-    renderer.setClearColor(new THREE.Color(0xEEEEEE), 1.0);
+    renderer.setClearColor(new THREE.Color(0x000000), 1.0); // Cambiado a negro
     
     // Se establece el tamaño, se aprovecha la totalidad de la ventana del navegador
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -297,8 +305,11 @@ class MyScene extends THREE.Scene {
     // La visualización se muestra en el lienzo recibido
     $(myCanvas).append(renderer.domElement);
     
+    const loader = new THREE.TextureLoader();
+    const starTexture = loader.load('../imgs/estrellas.jpg');
+    this.background = starTexture;
     return renderer;  
-  }
+}
   
   getCamera () {
     // En principio se devuelve la única cámara que tenemos

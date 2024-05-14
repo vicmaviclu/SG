@@ -72,7 +72,6 @@ class MyJuego extends THREE.Object3D {
     
       let objeto;
       let randomValue = Math.random();
-    
       if (randomValue < 0.50) { 
         let goodRandomValue = Math.random();
         if (goodRandomValue < 0.45) { // 44%
@@ -104,7 +103,7 @@ class MyJuego extends THREE.Object3D {
         (point.y) * scale + positions[positionIndex].y,
         point.z * scale
       );
-    
+
       if (positionIndex === 2) {
         objeto.rotateX(Math.PI);
       }

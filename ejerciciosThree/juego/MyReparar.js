@@ -94,6 +94,12 @@ class MyReparar extends THREE.Object3D {
 
     this.grupoReparar.translateY(0.5);
 
+    /* LUZ */
+    this.luz = new THREE.PointLight(0xffff00, 1, 10); // Luz amarilla
+    this.grupoReparar.add(this.luz);
+
+    this.encendido = true;
+
     /* THIS */
     this.add(this.grupoReparar);
     
@@ -101,6 +107,20 @@ class MyReparar extends THREE.Object3D {
   update () {
     // Actualización del objeto
     this.grupoReparar.rotation.y += 0.025;
+
+    // Atenuar luz
+    if (this.encendido) {
+      this.luz.intensity -= 0.002;
+      if (this.luz.intensity <= 0) {
+        this.encendido = false;
+      }
+    }
+    else {
+      this.luz.intensity += 0.002;
+      if (this.luz.intensity >= 1) {
+        this.encendido = true;
+      }
+    }
   }
 }
 

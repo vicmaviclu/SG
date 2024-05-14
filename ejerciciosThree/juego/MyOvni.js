@@ -53,13 +53,35 @@ class MyOvni extends THREE.Object3D {
     this.ovni.add(luzAbajo_M);
     this.ovni.scale.set(0.25, 0.25, 0.25);
 
-    this.ovni.translateY(0.15);
+    this.ovni.translateY(0.35);
+
+    /* LUZ */
+    this.luz = new THREE.PointLight(0x00ff00, 1, 10);
+    this.luz.position.set(0, 0, 0);
+    this.ovni.add(this.luz);
+
+    this.encendido = true;
+
     this.add(this.ovni);
   }
   
   update () {
     // Actualización del objeto
     this.ovni.rotation.y += 0.01;
+
+    // Atenuar luz
+    if (this.encendido) {
+      this.luz.intensity -= 0.002;
+      if (this.luz.intensity <= 0) {
+        this.encendido = false;
+      }
+    }
+    else {
+      this.luz.intensity += 0.002;
+      if (this.luz.intensity >= 1) {
+        this.encendido = true;
+      }
+    }
   }
 }
 

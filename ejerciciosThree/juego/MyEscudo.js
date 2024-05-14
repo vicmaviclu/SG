@@ -119,11 +119,32 @@ class MyEscudo extends THREE.Object3D {
     this.group.translateY(0.43);
 
     this.group.scale.set(0.5,0.5,0.5);
+
+    /* LUCES */
+    this.luz = new THREE.PointLight(0xff0000, 1, 10);
+    this.luz.position.set(-0.1, 0.1, 0);
+    this.group.add(this.luz);
+
+    this.encendido = true;
+
     this.add(this.group);
 
   }
 
   update () {
+    // Atenuar luz
+    if (this.encendido) {
+      this.luz.intensity -= 0.002;
+      if (this.luz.intensity <= 0) {
+        this.encendido = false;
+      }
+    }
+    else {
+      this.luz.intensity += 0.002;
+      if (this.luz.intensity >= 1) {
+        this.encendido = true;
+      }
+    }
   }
 }
 

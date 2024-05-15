@@ -77,11 +77,9 @@ class MyOjoVolador extends THREE.Object3D {
   }
 
   createGUI(gui, titleGui) {
-    // GUI code here
   }
 
   update() {
-    // Update code here
     this.updateC++;
 
     if (this.updateC % 3 === 0) {
@@ -89,30 +87,30 @@ class MyOjoVolador extends THREE.Object3D {
         case 0: // Posición inicial
           this.alaD.rotateX(0.3);
           this.alaD.position.y += 0.3;
-          this.alaI.rotateX(0.3); // Añadido para alaI
-          this.alaI.position.y += 0.3; // Añadido para alaI
+          this.alaI.rotateX(0.3); 
+          this.alaI.position.y += 0.3; 
           this.p++;
           break;
         case 1: // Subiendo
           this.alaD.rotateX(-0.3);
           this.alaD.position.y -= 0.3;
-          this.alaI.rotateX(-0.3); // Añadido para alaI
-          this.alaI.position.y -= 0.3; // Añadido para alaI
+          this.alaI.rotateX(-0.3); 
+          this.alaI.position.y -= 0.3; 
           this.p++;
           break;
         case 2: // Volviendo a la posición inicial
           this.alaD.rotateX(-0.3);
           this.alaD.position.y -= 0.3;
-          this.alaI.rotateX(-0.3); // Añadido para alaI
-          this.alaI.position.y -= 0.3; // Añadido para alaI
+          this.alaI.rotateX(-0.3); 
+          this.alaI.position.y -= 0.3; 
           this.p++;
           break;
         case 3: // Bajando
           this.alaD.rotateX(0.3);
           this.alaD.position.y += 0.3;
-          this.alaI.rotateX(0.3); // Añadido para alaI
-          this.alaI.position.y += 0.3; // Añadido para alaI
-          this.p = 0; // Vuelve al estado inicial después de bajar
+          this.alaI.rotateX(0.3); 
+          this.alaI.position.y += 0.3; 
+          this.p = 0; 
           break;
       }
     }

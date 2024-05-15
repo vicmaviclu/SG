@@ -66,10 +66,8 @@ class MyOvni extends THREE.Object3D {
   }
   
   update () {
-    // Actualización del objeto
     this.ovni.rotation.y += 0.01;
 
-    // Atenuar luz
     if (this.encendido) {
       this.luz.intensity -= 0.002;
       if (this.luz.intensity <= 0) {

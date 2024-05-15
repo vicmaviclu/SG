@@ -5,11 +5,17 @@ class MyCircuito extends THREE.Object3D {
     super();
     this.createGUI(gui, titleGui);
 
+    /* TEXTURE */
+    const textureLoader = new THREE.TextureLoader();
+    const texture = textureLoader.load('../imgs/asfalto.jpg'); 
+
+
     /* MATERIAL */
     const material = new THREE.MeshStandardMaterial({
-      color: 0xCCCCCC, 
-      roughness: 0.3, 
-      metalness: 0.5, 
+      map: texture, 
+      metalness: 0.5,
+      roughness: 0.5,
+
     });
     
     this.points = [
@@ -48,7 +54,6 @@ class MyCircuito extends THREE.Object3D {
     this.radio = 0.15;
     const geometry = new THREE.TubeGeometry(path, 1000, this.radio, 16, true);
 
-    
     /* MESH */
     const mesh = new THREE.Mesh(geometry, material);
     this.add(mesh);
@@ -63,11 +68,9 @@ class MyCircuito extends THREE.Object3D {
   }
 
   createGUI(gui, titleGui) {
-    // GUI code here
   }
 
   update() {
-    // Update code here
   }
 }
 

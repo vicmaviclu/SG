@@ -257,25 +257,19 @@ this.add(sun);
   }
   
   createLights () {
-    // Se crea una luz ambiental, evita que se vean complentamente negras las zonas donde no incide de manera directa una fuente de luz
-    // La luz ambiental solo tiene un color y una intensidad
-    // Se declara como   var   y va a ser una variable local a este método
-    //    se hace así puesto que no va a ser accedida desde otros métodos
-    this.ambientLight = new THREE.AmbientLight(0xCCCCCC, this.guiControls.ambientIntensity); // Cambiado 'white' a 0xCCCCCC para un gris claro
+
+    this.ambientLight = new THREE.AmbientLight(0xCCCCCC, this.guiControls.ambientIntensity); 
     this.add(this.ambientLight);
     
-    // Se crea una luz focal que va a ser la luz principal de la escena
-    // La luz focal, además tiene una posición, y un punto de mira
-    // Si no se le da punto de mira, apuntará al (0,0,0) en coordenadas del mundo
-    // En este caso se declara como   this.atributo   para que sea un atributo accesible desde otros métodos.
+
     this.pointLight = new THREE.PointLight( 0xffffff );
     this.pointLight.power = this.guiControls.lightPower;
     this.pointLight.position.set( 2, 3, 1 );
     this.add (this.pointLight);
 
-    this.sunsetLight = new THREE.DirectionalLight(0xFF4500, 1); // Añade una intensidad a la luz
+    this.sunsetLight = new THREE.DirectionalLight(0xFF4500, 1); 
     this.sunsetLight.position.set(2, -6, 0);
-    this.add(this.sunsetLight); // Asegúrate de añadir la luz a la escena
+    this.add(this.sunsetLight); 
   }
   
   setLightPower (valor) {
@@ -291,18 +285,13 @@ this.add(sun);
   }
   
   createRenderer(myCanvas) {
-    // Se recibe el lienzo sobre el que se van a hacer los renderizados. Un div definido en el html.
     
-    // Se instancia un Renderer WebGL
     var renderer = new THREE.WebGLRenderer();
     
-    // Se establece un color de fondo en las imágenes que genera el render
-    renderer.setClearColor(new THREE.Color(0x000000), 1.0); // Cambiado a negro
+    renderer.setClearColor(new THREE.Color(0x000000), 1.0); 
     
-    // Se establece el tamaño, se aprovecha la totalidad de la ventana del navegador
     renderer.setSize(window.innerWidth, window.innerHeight);
     
-    // La visualización se muestra en el lienzo recibido
     $(myCanvas).append(renderer.domElement);
     
     const loader = new THREE.TextureLoader();
@@ -318,11 +307,10 @@ this.add(sun);
   }
   
   setCameraAspect (ratio) {
-    // Cada vez que el usuario modifica el tamaño de la ventana desde el gestor de ventanas de
-    // su sistema operativo hay que actualizar el ratio de aspecto de la cámara
+
     this.camera1.aspect = ratio;
     this.camera2.aspect = ratio;
-    // Y si se cambia ese dato hay que actualizar la matriz de proyección de la cámara
+
     this.camera1.updateProjectionMatrix();
     this.camera2.updateProjectionMatrix();
   }

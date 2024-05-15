@@ -213,10 +213,8 @@ class MyPersonaje extends THREE.Object3D {
       teclaIzquierda = false;
     }
 
-    // Mover todo el grupo aleron un poco en el eje Y
     var time = Date.now() * 0.001;
 
-    // Mover aleron y plancha1 suavemente
     this.aleron.rotation.y = Math.sin(time) * 0.5;
     this.plancha1.rotateX(Math.sin(time) * 0.015);
   }

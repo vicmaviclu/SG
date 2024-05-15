@@ -295,7 +295,7 @@ this.add(sun);
     $(myCanvas).append(renderer.domElement);
     
     const loader = new THREE.TextureLoader();
-    const starTexture = loader.load('../imgs/estrellas.jpg');
+    const starTexture = loader.load('../imgs/estrellas2.jpg');
     this.background = starTexture;
     return renderer;  
 }

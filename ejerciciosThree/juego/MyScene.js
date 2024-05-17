@@ -49,15 +49,15 @@ class MyScene extends THREE.Scene {
     this.model = new MyJuego();
     this.add(this.model);
 
-var geometry = new THREE.SphereGeometry(1, 32, 32);
+    var geometry = new THREE.SphereGeometry(1, 32, 32);
 
-var material = new THREE.MeshBasicMaterial({color: 0xFF4500, emissive: 0xFF4500});
+    var material = new THREE.MeshBasicMaterial({color: 0xFF4500, emissive: 0xFF4500});
 
-var sun = new THREE.Mesh(geometry, material);
+    var sun = new THREE.Mesh(geometry, material);
 
-sun.position.copy(this.sunsetLight.position);
+    sun.position.copy(this.luzSol.position);
 
-this.add(sun);
+    this.add(sun);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Picking ///////////////////////////////////////////
@@ -267,9 +267,9 @@ this.add(sun);
     this.pointLight.position.set( 2, 3, 1 );
     this.add (this.pointLight);
 
-    this.sunsetLight = new THREE.DirectionalLight(0xFF4500, 1); 
-    this.sunsetLight.position.set(2, -6, 0);
-    this.add(this.sunsetLight); 
+    this.luzSol = new THREE.DirectionalLight(0xFF4500, 1); 
+    this.luzSol.position.set(2, -6, 0);
+    this.add(this.luzSol); 
   }
   
   setLightPower (valor) {

@@ -10,7 +10,7 @@ class MyEscudo extends THREE.Object3D {
     var textura = loader.load('../../texturas/grietas.jpg');
     textura.wrapS = THREE.RepeatWrapping;
     textura.wrapT = THREE.RepeatWrapping;
-    textura.repeat.set(1,1);
+    textura.repeat.set(2,2);
     var material = new THREE.MeshStandardMaterial({
       color: 0x666666,
       map: textura,

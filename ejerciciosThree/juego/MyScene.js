@@ -207,6 +207,7 @@ class MyScene extends THREE.Scene {
       axisOnOff : true,
       puntuacion: 0,
       velocidad: 100,
+      vuelta: 0,
       ruedaIzquierda: true,
       ruedaDerecha: true,
       escudo: false
@@ -239,6 +240,9 @@ class MyScene extends THREE.Scene {
        .name('Velocidad: ')
        .listen();
     
+    gui.add(this.guiControls, 'vuelta')
+       .name('Vuelta: ')
+       .listen();
     // Ruedas
     gui.add(this.guiControls, 'ruedaIzquierda')
       .name('Rueda izquierda: ')
@@ -336,13 +340,22 @@ class MyScene extends THREE.Scene {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Se actualiza el resto del modelo
     this.model.update(this.teclaDerecha, this.teclaIzquierda, this.isThirdPersonCamera, this.camera2);
-  
+    
+    if (this.model.vuelta === 3) {
+      localStorage.setItem('score', this.model.getPuntuacion());
+
+      window.location.href = 'fin.html';
+
+      return;
+    }
+
     // Camara /////////////////////////
     this.renderer.render (this, this.getCamera());
 
     // Interfaz /////////////////////////
     this.guiControls.puntuacion = this.model.getPuntuacion();
-    this.guiControls.velocidad = this.model.getVelocidad() / 0.005 * 100;
+    this.guiControls.velocidad = this.model.getVelocidad() / 0.000025 * 100;
+    this.guiControls.vuelta = this.model.getVuelta();
     this.guiControls.ruedaIzquierda = this.model.getGiroIzquierda();
     this.guiControls.ruedaDerecha = this.model.getGiroDerecha();
     this.guiControls.escudo = this.model.getEscudo();

@@ -7,7 +7,7 @@ class MyCircuito extends THREE.Object3D {
 
     /* TEXTURE */
     const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load('../imgs/asfalto.jpg'); 
+    const texture = textureLoader.load('../texturas/asfalto.jpg'); 
 
 
     /* MATERIAL */

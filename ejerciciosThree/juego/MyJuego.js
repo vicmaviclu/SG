@@ -39,6 +39,9 @@ class MyJuego extends THREE.Object3D {
     // Escudo
     this.escudo = false;
 
+    // Fin
+    this.vuelta = 0;
+
 /************** OJOS VOLADORES ***************/
     // Crear ojos voladores
     this.ojosVoladores = [];
@@ -94,8 +97,6 @@ class MyJuego extends THREE.Object3D {
     
       objeto.scale.set(0.2, 0.2, 0.2);
     
-      // Añade un valor a la coordenada y para que el modelo esté por encima del tubo
-      // Usa el módulo de i con 4 para rotar entre las cuatro posiciones cada dos objetos
       let positionIndex = Math.floor(i / 2) % 4;
     
       objeto.position.set(
@@ -130,7 +131,7 @@ class MyJuego extends THREE.Object3D {
 /****************** ANIMACION *********************/
     // Inicializar this.origen antes de llamar a this.setupAnimation();
     this.origen = { t: 0 };
-    this.velocidad = 0.005;
+    this.velocidad = 0.000025;
 
     this.setupAnimation();
 
@@ -165,6 +166,10 @@ class MyJuego extends THREE.Object3D {
     return this.velocidad;
   }
 
+  getVuelta() {
+    return this.vuelta;
+  }
+
 /****************** SETTERS *********************/
   setPuntuacion(puntos) {
     if(this.puntuacion + puntos < 0){
@@ -189,8 +194,8 @@ class MyJuego extends THREE.Object3D {
     this.segmentos = 500;
     this.frenetFrames = this.path.computeFrenetFrames(this.segmentos, true);
 
-    var fin = { t: this.origen.t + 0.00001 }; 
-    var tiempoDeRecorrido = this.velocidad; 
+    var fin = { t: this.origen.t + this.velocidad }; 
+    var tiempoDeRecorrido = 5; 
 
     // Animación: seguir un camino recto
     this.animacion = new TWEEN.Tween(this.origen).to(fin, tiempoDeRecorrido)
@@ -214,6 +219,7 @@ class MyJuego extends THREE.Object3D {
       if (this.origen.t > 0.999) {
           this.origen.t = 0;
           this.velocidad *= 1.10; // Aumentar la velocidad un 10%
+          this.vuelta += 1;
       } else {
           this.origen.t += 0.0001; 
       }

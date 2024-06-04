@@ -49,15 +49,15 @@ class MyScene extends THREE.Scene {
     this.model = new MyJuego();
     this.add(this.model);
 
-var geometry = new THREE.SphereGeometry(1, 32, 32);
+    var geometry = new THREE.SphereGeometry(1, 32, 32);
 
-var material = new THREE.MeshBasicMaterial({color: 0xFF4500, emissive: 0xFF4500});
+    var material = new THREE.MeshBasicMaterial({color: 0xFF4500, emissive: 0xFF4500});
 
-var sun = new THREE.Mesh(geometry, material);
+    var sun = new THREE.Mesh(geometry, material);
 
-sun.position.copy(this.sunsetLight.position);
+    sun.position.copy(this.luzSol.position);
 
-this.add(sun);
+    this.add(sun);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Picking ///////////////////////////////////////////
@@ -207,6 +207,7 @@ this.add(sun);
       axisOnOff : true,
       puntuacion: 0,
       velocidad: 100,
+      vuelta: 0,
       ruedaIzquierda: true,
       ruedaDerecha: true,
       escudo: false
@@ -239,6 +240,9 @@ this.add(sun);
        .name('Velocidad: ')
        .listen();
     
+    gui.add(this.guiControls, 'vuelta')
+       .name('Vuelta: ')
+       .listen();
     // Ruedas
     gui.add(this.guiControls, 'ruedaIzquierda')
       .name('Rueda izquierda: ')
@@ -267,9 +271,9 @@ this.add(sun);
     this.pointLight.position.set( 2, 3, 1 );
     this.add (this.pointLight);
 
-    this.sunsetLight = new THREE.DirectionalLight(0xFF4500, 1); 
-    this.sunsetLight.position.set(2, -6, 0);
-    this.add(this.sunsetLight); 
+    this.luzSol = new THREE.DirectionalLight(0xFF4500, 1); 
+    this.luzSol.position.set(2, -6, 0);
+    this.add(this.luzSol); 
   }
   
   setLightPower (valor) {
@@ -336,13 +340,22 @@ this.add(sun);
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Se actualiza el resto del modelo
     this.model.update(this.teclaDerecha, this.teclaIzquierda, this.isThirdPersonCamera, this.camera2);
-  
+    
+    if (this.model.vuelta === 3) {
+      localStorage.setItem('score', this.model.getPuntuacion());
+
+      window.location.href = 'fin.html';
+
+      return;
+    }
+
     // Camara /////////////////////////
     this.renderer.render (this, this.getCamera());
 
     // Interfaz /////////////////////////
     this.guiControls.puntuacion = this.model.getPuntuacion();
-    this.guiControls.velocidad = this.model.getVelocidad() / 0.005 * 100;
+    this.guiControls.velocidad = this.model.getVelocidad() / 0.000025 * 100;
+    this.guiControls.vuelta = this.model.getVuelta();
     this.guiControls.ruedaIzquierda = this.model.getGiroIzquierda();
     this.guiControls.ruedaDerecha = this.model.getGiroDerecha();
     this.guiControls.escudo = this.model.getEscudo();

@@ -122,7 +122,7 @@ class MyEscudo extends THREE.Object3D {
 
     /* LUCES */
     this.luz = new THREE.PointLight(0xff0000, 1, 10);
-    this.luz.position.set(-0.1, 0.1, 0);
+    this.luz.position.set(0, 0.1, 0);
     this.group.add(this.luz);
 
     this.encendido = true;
